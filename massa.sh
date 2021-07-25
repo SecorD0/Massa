@@ -21,7 +21,7 @@ do
   sleep 10
 done
 tmux send-keys 'C-c'
-sudo tee <<EOF >/dev/null /etc/systemd/system/massa.service
+sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
 [Unit]
 Description=Massa Node
 
@@ -36,9 +36,9 @@ ExecStart=$HOME/massa/target/release/massa-node
 [Install]
 WantedBy=multi-user.target
 EOF
-sudo systemctl enable massa
+sudo systemctl enable massad
 sudo systemctl daemon-reload
-sudo systemctl start massa
+sudo systemctl start massad
 echo -e '\e[40m\e[92mDone!\e[0m'
 echo -e '\e[40m\e[92mClient installation...\e[0m'
 tmux send-keys 'cd $HOME/massa/massa-client/' 'C-m'
@@ -65,6 +65,6 @@ echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcom
 echo -e '\tv \e[40m\e[92mUseful commands\e[0m v\n'
 echo -e 'To start a client for blockchain interaction: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run --release; cd\e[0m'
 echo -e 'To start a client for wallet interaction: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run -- --wallet wallet.dat; cd\e[0m'
-echo -e 'To view the node status: \e[40m\e[92msystemctl status massa\e[0m'
-echo -e 'To view the node log: \e[40m\e[92mjournalctl -n 100 -f -u massa\e[0m'
-echo -e 'To restart the node: \e[40m\e[92msystemctl restart massa\e[0m\n'
+echo -e 'To view the node status: \e[40m\e[92msystemctl status massad\e[0m'
+echo -e 'To view the node log: \e[40m\e[92mjournalctl -n 100 -f -u massad\e[0m'
+echo -e 'To restart the node: \e[40m\e[92msystemctl restart massad\e[0m\n'
