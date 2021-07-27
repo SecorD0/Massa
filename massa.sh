@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt update
 sudo apt install curl -y
-curl -s https://raw.githubusercontent.com/SecorD0/Massa/main/logo.sh | bash
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 sudo apt install pkg-config curl git build-essential libssl-dev
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source $HOME/.cargo/env
@@ -56,7 +56,7 @@ do
 done
 cd
 echo -e '\e[40m\e[92mDone!\e[0m'
-curl -s https://raw.githubusercontent.com/SecorD0/Massa/main/logo.sh | bash
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcompiled\e[0m, the wallet was \e[40m\e[92mcreated\e[0m.\n'
 echo -e '\tv \e[40m\e[92mUseful commands\e[0m v\n'
 echo -e 'To start a client for blockchain interaction: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run --release; cd\e[0m'
