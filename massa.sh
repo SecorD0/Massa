@@ -19,7 +19,7 @@ do
   sleep 10
 done
 kill -9 $(pgrep "massa-node")
-sudo tee <<EOF >/dev/null /etc/systemd/system/massa.service
+sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
 [Unit]
 Description=Massa Node
 
@@ -34,9 +34,9 @@ ExecStart=$HOME/massa/target/release/massa-node
 [Install]
 WantedBy=multi-user.target
 EOF
-sudo systemctl enable massa
+sudo systemctl enable massad
 sudo systemctl daemon-reload
-sudo systemctl restart massa
+sudo systemctl restart massad
 echo -e '\e[40m\e[92mDone!\e[0m'
 echo -e '\e[40m\e[92mClient installation...\e[0m'
 cd $HOME/massa/massa-client/
