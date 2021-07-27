@@ -2,6 +2,7 @@
 sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
 [Unit]
 Description=Massa Node
+After=network-online.target
 
 [Service]
 User=$USER
