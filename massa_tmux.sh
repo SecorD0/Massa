@@ -1,6 +1,7 @@
 #!/bin/bash
 sudo apt update
 sudo apt install curl -y
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 sudo apt install tmux -y
 sudo apt install pkg-config curl git build-essential libssl-dev
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -38,4 +39,5 @@ done
 tmux send-keys 'wallet_new_privkey' Enter
 tmux send-keys 'quit' Enter
 echo -e '\e[40m\e[92mDone!\e[0m'
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 echo -e '\nThe node and the client \e[40m\e[92mwere started\e[0m.\n\nCommand to enter node window: \e[40m\e[92mtmux attach -t massa-node\e[0m\nCommand to enter client window: \e[40m\e[92mtmux attach -t massa-client\e[0m\n'
