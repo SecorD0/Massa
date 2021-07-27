@@ -1,8 +1,8 @@
 #!/bin/bash
-sudo apt update < "/dev/null"
-sudo apt install curl -y < "/dev/null"
+sudo apt update
+sudo apt install curl -y
 curl -s https://raw.githubusercontent.com/SecorD0/Massa/main/logo.sh | bash
-sudo apt install pkg-config curl git build-essential libssl-dev < "/dev/null"
+sudo apt install pkg-config curl git build-essential libssl-dev
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source $HOME/.cargo/env
 rustup toolchain install nightly
