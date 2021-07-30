@@ -2,6 +2,7 @@
 sudo apt update
 sudo apt install curl -y
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
+sudo apt upgrade -y
 sudo apt install pkg-config curl git build-essential libssl-dev
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source $HOME/.cargo/env
