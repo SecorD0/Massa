@@ -10,10 +10,6 @@ rustup default nightly
 cd $HOME
 if [ ! -d $HOME/massa/ ]; then
 	git clone --branch testnet https://gitlab.com/massalabs/massa.git
-	cd massa/
-	git stash
-	git checkout testnet
-	git pull
 fi
 echo -e '\e[40m\e[92mNode installation...\e[0m'
 cd $HOME/massa/massa-node/
