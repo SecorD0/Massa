@@ -9,7 +9,11 @@ rustup toolchain install nightly
 rustup default nightly
 cd $HOME
 if [ ! -d $HOME/massa/ ]; then
-	git clone https://gitlab.com/massalabs/massa.git
+	git clone --branch testnet https://gitlab.com/massalabs/massa.git
+	cd massa/
+	git stash
+	git checkout testnet
+	git pull
 fi
 echo -e '\e[40m\e[92mNode installation...\e[0m'
 cd $HOME/massa/massa-node/
@@ -58,6 +62,9 @@ cd
 echo -e '\e[40m\e[92mDone!\e[0m'
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcompiled\e[0m, the wallet was \e[40m\e[92mcreated\e[0m.\n'
+echo -e 'Remember to save this files:'
+echo -e "\e[40m\e[92m/root/massa/massa-node/config/node_privkey.key\e[0m"
+echo -e "\e[40m\e[92m/root/massa/massa-client/wallet.dat\e[0m"
 echo -e '\tv \e[40m\e[92mUseful commands\e[0m v\n'
 echo -e 'To start a client for blockchain interaction: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run --release; cd\e[0m'
 echo -e 'To start a client for wallet interaction: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run -- --wallet wallet.dat; cd\e[0m'
