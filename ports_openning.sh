@@ -6,7 +6,9 @@ if sudo ufw status | grep "Status: active"; then
 else
 	sudo iptables -I INPUT -p tcp --dport 31244 -j ACCEPT
 	sudo iptables -I INPUT -p tcp --dport 31245 -j ACCEPT
-	sudo apt-get -y install iptables-persistent
+	echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
+	echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
+	sudo apt -y install iptables-persistent
 	sudo netfilter-persistent save
 fi
 if ! sudo grep -q "routable_ip" "$HOME/massa/massa-node/config/config.toml"; then
