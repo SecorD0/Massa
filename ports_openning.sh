@@ -9,7 +9,7 @@ else
 	sudo apt-get -y install iptables-persistent
 	sudo netfilter-persistent save
 fi
-if ! sudo grep "routable_ip" "$HOME/massa/massa-node/config/config.toml"; then
+if ! sudo grep -q "routable_ip" "$HOME/massa/massa-node/config/config.toml"; then
 	IP=$(wget -qO- eth0.me)
 	sed -i "/\[network\]/a routable_ip=\"$IP\"" "$HOME/massa/massa-node/config/config.toml"
 fi
