@@ -8,7 +8,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source $HOME/.cargo/env
 rustup toolchain install nightly
 rustup default nightly
-cd $HOME
+cd
 if [ ! -d $HOME/massa/ ]; then
 	git clone --branch testnet https://gitlab.com/massalabs/massa.git
 fi
