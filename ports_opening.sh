@@ -1,6 +1,6 @@
 #!/bin/bash
 systemctl stop massad
-if sudo ufw status | grep "Status: active"; then
+if sudo ufw status | grep -q "Status: active"; then
 	sudo ufw allow 31244
 	sudo ufw allow 31245
 else
