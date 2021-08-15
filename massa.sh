@@ -3,7 +3,7 @@ sudo apt update
 sudo apt install curl -y
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 sudo apt upgrade -y
-sudo apt install pkg-config curl git build-essential libssl-dev
+sudo apt install pkg-config curl git build-essential libssl-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source $HOME/.cargo/env
 rustup toolchain install nightly
@@ -14,12 +14,7 @@ if [ ! -d $HOME/massa/ ]; then
 fi
 echo -e '\e[40m\e[92mNode installation...\e[0m'
 cd $HOME/massa/massa-node/
-RUST_BACKTRACE=full cargo run --release compile |& tee logs.txt/ &
-while [ ! -d $HOME/massa/massa-node/ledger/ ]
-do
-  sleep 10
-done
-kill -9 $(pgrep "massa-node")
+RUST_BACKTRACE=full cargo build --release |& tee logs.txt
 sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
 [Unit]
 Description=Massa Node
@@ -42,19 +37,7 @@ sudo systemctl restart massad
 echo -e '\e[40m\e[92mDone!\e[0m'
 echo -e '\e[40m\e[92mClient installation...\e[0m'
 cd $HOME/massa/massa-client/
-cargo run --release our_ip
-while [ ! -f $HOME/massa/massa-client/config/history.txt ]
-do
-  sleep 10
-done
-echo -e '\e[40m\e[92mDone!\e[0m'
-echo -e '\e[40m\e[92mWallet creating...\e[0m'
-rm $HOME/massa/massa-client/config/history.txt
-cargo run -- --wallet wallet.dat wallet_new_privkey
-while [ ! -f $HOME/massa/massa-client/config/history.txt ]
-do
-  sleep 10
-done
+cargo run --release wallet_new_privkey
 cd
 echo -e '\e[40m\e[92mDone!\e[0m'
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
