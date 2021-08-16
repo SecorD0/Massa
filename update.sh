@@ -22,7 +22,7 @@ cd $HOME/massa/massa-client/
 cargo build --release
 sudo cp $HOME/massa_buckup/wallet.dat $HOME/massa/massa-client/wallet.dat
 massa_wallet_address=$(cargo run --release wallet_info | jq ".balances | keys[]")
-curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_wallet_address" massa_wallet_address
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_wallet_address" $massa_wallet_address
 cargo run --release -- buy_rolls $massa_wallet_address 20 0
 cargo run --release -- register_staking_keys $(cargo run --release wallet_info | jq -r ".wallet[0]")
 cd
