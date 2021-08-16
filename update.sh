@@ -15,6 +15,7 @@ echo -e '\e[40m\e[92mNode installation...\e[0m'
 cd $HOME/massa/massa-node/
 RUST_BACKTRACE=full cargo build --release |& tee logs.txt
 sudo cp $HOME/massa_buckup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
+sed -i "/\[network\]/a routable_ip=\"$(wget -qO- eth0.me)\"" "$HOME/massa/massa-node/config/config.toml"
 sudo systemctl start massad
 echo -e '\e[40m\e[92mDone!\e[0m'
 echo -e '\e[40m\e[92mClient installation...\e[0m'
