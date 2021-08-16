@@ -37,7 +37,7 @@ echo -e 'Remember to save this files:'
 echo -e "\e[40m\e[92m/root/massa/massa-node/config/node_privkey.key\e[0m"
 echo -e "\e[40m\e[92m/root/massa/massa-client/wallet.dat\e[0m\n\n"
 echo -e '\tv \e[40m\e[92mUseful commands\e[0m v\n'
-echo -e 'To start a client: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run --release; cd\e[0m'
+echo -e 'To start a client: \e[40m\e[92mmassa_client\e[0m'
 echo -e 'To view the node status: \e[40m\e[92msystemctl status massad\e[0m'
-echo -e 'To view the node log: \e[40m\e[92mjournalctl -n 100 -f -u massad\e[0m'
+echo -e 'To view the node log: \e[40m\e[92mmassa_status\e[0m'
 echo -e 'To restart the node: \e[40m\e[92msystemctl restart massad\e[0m\n'
