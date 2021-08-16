@@ -38,7 +38,11 @@ echo -e '\e[40m\e[92mDone!\e[0m'
 echo -e '\e[40m\e[92mClient installation...\e[0m'
 cd $HOME/massa/massa-client/
 cargo run --release wallet_new_privkey
+massa_wallet_address=$(cargo run --release wallet_info | jq -r ".balances | keys[]")
 cd
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_wallet_address" $massa_wallet_address
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_status" "journalctl -n 100 -f -u massad" true
+curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_client" "cd $HOME/massa/massa-client/; cargo run --release; cd" true
 echo -e '\e[40m\e[92mDone!\e[0m'
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcompiled\e[0m, the wallet was \e[40m\e[92mcreated\e[0m.\n'
