@@ -43,6 +43,7 @@ cd
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_wallet_address" $massa_wallet_address
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_status" "journalctl -n 100 -f -u massad" true
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh | bash -s "massa_client" "cd $HOME/massa/massa-client/; cargo run --release; cd" true
+. ~/.bash_profile
 echo -e '\e[40m\e[92mDone!\e[0m'
 curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
 echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcompiled\e[0m, the wallet was \e[40m\e[92mcreated\e[0m.\n'
@@ -50,7 +51,7 @@ echo -e 'Remember to save this files:'
 echo -e "\e[40m\e[92m/root/massa/massa-node/config/node_privkey.key\e[0m"
 echo -e "\e[40m\e[92m/root/massa/massa-client/wallet.dat\e[0m\n\n"
 echo -e '\tv \e[40m\e[92mUseful commands\e[0m v\n'
-echo -e 'To start a client: \e[40m\e[92mcd $HOME/massa/massa-client/; cargo run --release; cd\e[0m'
+echo -e 'To start a client: \e[40m\e[92mmassa_client\e[0m'
 echo -e 'To view the node status: \e[40m\e[92msystemctl status massad\e[0m'
-echo -e 'To view the node log: \e[40m\e[92mjournalctl -n 100 -f -u massad\e[0m'
+echo -e 'To view the node log: \e[40m\e[92mmassa_status\e[0m'
 echo -e 'To restart the node: \e[40m\e[92msystemctl restart massad\e[0m\n'
