@@ -22,11 +22,11 @@ After=network-online.target
 
 [Service]
 User=$USER
+WorkingDirectory=$HOME/massa/massa-node
+ExecStart=$HOME/massa/target/release/massa-node
 Restart=always
 RestartSec=3
 LimitNOFILE=65535
-WorkingDirectory=$HOME/massa/massa-node
-ExecStart=$HOME/massa/target/release/massa-node
 
 [Install]
 WantedBy=multi-user.target
