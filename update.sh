@@ -8,11 +8,11 @@ sudo mv $HOME/massa/massa-client/wallet.dat $HOME/massa_buckup/wallet.dat
 sudo mv $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_buckup/node_privkey.key
 sudo rm -rf $HOME/massa
 sudo apt upgrade -y
-sudo apt install curl pkg-config git build-essential libssl-dev -y
+sudo apt install curl jq pkg-config git build-essential libssl-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 . $HOME/.cargo/env
-sudo rustup toolchain install nightly
-sudo rustup default nightly
+rustup toolchain install nightly
+rustup default nightly
 cd
 git clone --branch testnet https://gitlab.com/massalabs/massa.git
 echo -e '\e[40m\e[92mNode installation...\e[0m'
