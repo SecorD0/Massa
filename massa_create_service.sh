@@ -1,5 +1,5 @@
 #!/bin/bash
-curl -s https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh | bash
+. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
 [Unit]
 Description=Massa Node
