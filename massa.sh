@@ -3,11 +3,11 @@ sudo apt update
 sudo apt install wget -y
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 sudo apt upgrade -y
-sudo apt install pkg-config curl git build-essential libssl-dev -y
+sudo apt install curl jq pkg-config git build-essential libssl-dev -y
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 . $HOME/.cargo/env
-sudo rustup toolchain install nightly
-sudo rustup default nightly
+rustup toolchain install nightly
+rustup default nightly
 cd
 if [ ! -d $HOME/massa/ ]; then
 	git clone --branch testnet https://gitlab.com/massalabs/massa.git
@@ -39,10 +39,10 @@ echo -e '\e[40m\e[92mClient installation...\e[0m'
 cd $HOME/massa/massa-client/
 cargo run --release wallet_new_privkey
 massa_wallet_address=$(cargo run --release wallet_info | jq -r ".balances | keys[]")
-cd
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $massa_wallet_address
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_client" "cd \$HOME\/massa\/massa-client\/; cargo run --release; cd" true
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_status" "journalctl -n 100 -f -u massad" true
+cd
 echo -e '\e[40m\e[92mDone!\e[0m'
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcompiled\e[0m, the wallet was \e[40m\e[92mcreated\e[0m.\n'
