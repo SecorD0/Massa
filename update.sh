@@ -29,7 +29,7 @@ sudo cp $HOME/massa_buckup/wallet.dat $HOME/massa/massa-client/wallet.dat
 massa_wallet_address=$(cargo run --release wallet_info | jq -r ".balances | keys[]")
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $massa_wallet_address
 . <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_client" "cd \$HOME\/massa\/massa-client\/; cargo run --release; cd" true
-. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_status" "journalctl -n 100 -f -u massad" true
+. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_log" "journalctl -n 100 -f -u massad" true "massa_status"
 cargo run --release -- buy_rolls $massa_wallet_address 20 0
 cargo run --release -- register_staking_keys $(cargo run --release wallet_info | jq -r ".wallet[0]")
 cd
