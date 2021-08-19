@@ -14,4 +14,6 @@ fi
 if ! sudo grep -q "routable_ip" "$HOME/massa/massa-node/config/config.toml"; then
 	sed -i "/\[network\]/a routable_ip=\"$(wget -qO- eth0.me)\"" "$HOME/massa/massa-node/config/config.toml"
 fi
+sudo apt install net-tools
+netstat -ntlp | grep "massa-node"
 systemctl restart massad
