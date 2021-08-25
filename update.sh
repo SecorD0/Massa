@@ -43,4 +43,4 @@ echo -e '\tv \e[40m\e[92mUseful commands\e[0m v\n'
 echo -e 'To start a client: \e[40m\e[92mmassa_client\e[0m'
 echo -e 'To view the node status: \e[40m\e[92msystemctl status massad\e[0m'
 echo -e 'To view the node log: \e[40m\e[92mmassa_status\e[0m'
-echo -e 'To restart the node: \e[40m\e[92msystemctl restart massad\e[0m\n'
+echo -e 'To restart the node: \e[40m\e[92msystemctl restart massad\e[0m\n'#
