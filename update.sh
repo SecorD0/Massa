@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt update
 sudo apt install wget -y
-. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 sudo systemctl stop massad
 mkdir $HOME/massa_buckup
 sudo mv $HOME/massa/massa-client/wallet.dat $HOME/massa_buckup/wallet.dat
@@ -27,14 +27,14 @@ cd $HOME/massa/massa-client/
 cargo build --release
 sudo cp $HOME/massa_buckup/wallet.dat $HOME/massa/massa-client/wallet.dat
 massa_wallet_address=$(cargo run --release wallet_info | jq -r ".balances | keys[]")
-. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $massa_wallet_address
-. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_client" "cd \$HOME\/massa\/massa-client\/; cargo run --release; cd" true
-. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_log" "journalctl -n 100 -f -u massad" true "massa_status"
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $massa_wallet_address
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_client" "cd \$HOME\/massa\/massa-client\/; cargo run --release; cd" true
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_log" "journalctl -n 100 -f -u massad" true "massa_status"
 cargo run --release -- buy_rolls $massa_wallet_address 20 0
 cargo run --release -- register_staking_keys $(cargo run --release wallet_info | jq -r ".wallet[0]")
 cd
 echo -e '\e[40m\e[92mDone!\e[0m'
-. <(wget -qO - https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 echo -e '\nThe node was \e[40m\e[92mstarted\e[0m, the client was \e[40m\e[92mcompiled\e[0m, the wallet was \e[40m\e[92mcreated\e[0m.\n'
 echo -e 'Remember to save this files:'
 echo -e "\e[40m\e[92m/root/massa/massa-node/config/node_privkey.key\e[0m"
