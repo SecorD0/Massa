@@ -33,6 +33,7 @@ massa_wallet_address=$(cargo run --release -- --cli true wallet_info | jq -r ".b
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_client" "cd \$HOME/massa/massa-client/; cargo run --release; cd" true
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_info" "cd \$HOME/massa/massa-client/; cargo run --release -- --cli false wallet_info 2> /dev/null; cd" true
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_peers" "cd \$HOME/massa/massa-client/; cargo run --release -- --cli false peers 2> /dev/null; cd" true
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_version" "cd \$HOME/massa/massa-client/; cargo run --release -- --cli false version 2> /dev/null; cd" true
 cargo run --release -- buy_rolls $massa_wallet_address 20 0
 cargo run --release -- register_staking_keys $(cargo run --release -- --cli true wallet_info | jq -r ".wallet[0]")
 cd
