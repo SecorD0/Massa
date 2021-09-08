@@ -47,6 +47,7 @@ done
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_info" "cd \$HOME/massa/massa-client/; ./massa-client --cli false wallet_info; cd" true
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_peers" "cd \$HOME/massa/massa-client/; ./massa-client --cli false peers; cd" true
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_version" "cd \$HOME/massa/massa-client/; ./massa-client --cli false version; cd" true
+./massa-client register_staking_keys $(./massa-client --cli true wallet_info | jq -r ".wallet[-1]")
 cd
 echo -e '\e[40m\e[92mDone!\e[0m'
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
