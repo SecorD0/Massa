@@ -10,7 +10,7 @@ elif [ "$1" = "massa_wallet_info" ]; then
 	./massa-client --cli false wallet_info
 elif [ "$1" = "massa_buy_rolls" ]; then
 	if [ "$2" = "true" ]; then
-		balance=`printf "%d" jq -r ".balances[0].final_ledger_data.balance" <<< $wallet_info`
+		balance=`printf "%d" jq -r ".balances[].final_ledger_data.balance" <<< $wallet_info`
 		roll_count=$(($balance/100))
 	else
 		read -p $'\e[40m\e[92mВведите количество покупаемы ROLL\'ов:\e[0m ' roll_count
