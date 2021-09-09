@@ -81,7 +81,7 @@ elif [ "$action" = "register_staking_keys" ]; then
 elif [ "$action" = "cmd_testnet_rewards_program" ]; then
 	printf "$t_ctrp"
 	read -r discord_id
-	./massa-client --cli true cmd_testnet_rewards_program $address discord_id
+	./massa-client --cli true cmd_testnet_rewards_program $address $discord_id
 else
 	printf_n "$t_err"
 fi
