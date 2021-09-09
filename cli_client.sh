@@ -44,7 +44,7 @@ if [ "$action" = "client" ]; then
 elif [ "$action" = "wallet_info" ]; then
 	./massa-client --cli false wallet_info
 elif [ "$action" = "buy_rolls" ]; then
-	balance_float=`jq -r ".balances[].final_ledger_data.balance" <<< $wallet_info`
+	balance_float=`jq -r ".balances[].candidate_ledger_data.balance" <<< $wallet_info`
 	balance=`printf "%d" $balance_float 2> /dev/null`
 	roll_count=$(($balance/100))
 	if [ "$3" = "true" ]; then
