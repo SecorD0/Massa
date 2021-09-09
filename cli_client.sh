@@ -52,7 +52,7 @@ elif [ "$action" = "buy_rolls" ]; then
 			printf_n "$t_br1"
 		else
 			./massa-client buy_rolls $address $roll_count 0
-			printf_n "$t_br2"
+			printf_n "$t_br2" $roll_count
 		fi
 	else
 		printf "$t_br3"
