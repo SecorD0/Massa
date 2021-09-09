@@ -13,6 +13,7 @@ elif [ "$1" = "massa_buy_rolls" ]; then
 		balance_float=`jq -r ".balances[].final_ledger_data.balance" <<< $wallet_info`
 		balance=`printf "%d" $balance_float 2> /dev/null`
 		roll_count=$(($balance/100))
+		echo -e "Куплено ROLL'ов: \e[40m\e[92m$roll_count\e[0m"
 	else
 		read -p $'\e[40m\e[92mВведите количество покупаемы ROLL\'ов:\e[0m ' roll_count
 	fi
