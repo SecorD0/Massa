@@ -3,7 +3,7 @@ sudo apt install wget -y
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 sudo apt update
 sudo apt upgrade -y
-sudo apt install wget jq unzip git build-essential pkg-config libssl-dev -y
+sudo apt install jq unzip git build-essential pkg-config libssl-dev -y
 echo -e '\e[40m\e[92mNode installation...\e[0m'
 wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/1566540813/artifacts/download
 unzip massa.zip
