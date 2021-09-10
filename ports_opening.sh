@@ -11,9 +11,7 @@ else
 	sudo apt install iptables-persistent -y
 	sudo netfilter-persistent save
 fi
-if ! sudo grep -q "routable_ip" "$HOME/massa/massa-node/config/config.toml"; then
-	sed -i "/\[network\]/a routable_ip=\"$(wget -qO- eth0.me)\"" "$HOME/massa/massa-node/config/config.toml"
-fi
-sudo apt install net-tools
+sed -i "s%.*# routable_ip *=.*%routable_ip=\"$(wget -qO- eth0.me)\"%" "$HOME/massa/massa-node/config/config.toml"
+sudo apt install net-tools -y
 netstat -ntlp | grep "massa-node"
 systemctl restart massad
