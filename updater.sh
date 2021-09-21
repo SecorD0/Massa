@@ -9,7 +9,7 @@ sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 echo -e '\e[40m\e[92mNode installation...\e[0m'
 rm -rf $HOME/massa/
-wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/1566540813/artifacts/download
+wget -qO massa.zip wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 unzip massa.zip
 rm -rf massa.zip
 sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
@@ -36,8 +36,7 @@ sudo systemctl restart massad
 cd $HOME/massa/massa-client/
 sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat
 wallet_address="null"
-while [ "$wallet_address" = "null" ]
-do
+while [ "$wallet_address" = "null" ]; do
 	wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
 	continue
 done
