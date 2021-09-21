@@ -2,6 +2,7 @@
 # $1 - Language (RU/EN)
 # $2 - Action
 # $3 - Buy for the whole balance? (true/false)
+# $@ - Any arguments for other commands
 # Functions
 printf_n(){ printf "$1\n" "${@:2}"; }
 # Colors
@@ -24,7 +25,8 @@ if [ "$1" = "RU" ]; then
 	t_v="Версия ноды: ${G}%s${W}"
 	t_nd1="Запланировано слотов: ${G}%s${W}"
 	t_nd2="Слотов ${R}не запланировано${W}, попробуйте позже ${G}ещё раз${W}"
-	t_ctrp="${G}Введите Discord ID:${W} "
+	t_ctrp1="${G}Введите Discord ID:${W} "
+	t_ctrp2="\nОтправьте Discord боту следующее:\n${G}%s${W}\n"
 	t_done="${G}Готово!${W}"
 	t_err="${R}Нет такого действия!${W}"
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
@@ -44,7 +46,8 @@ else
 	t_v="The node version: ${G}%s${W}"
 	t_nd1="Draws scheduled: ${G}%s${W}"
 	t_nd2="${R}No draws scheduled${W}, try ${G}again later${W}"
-	t_ctrp="${G}Enter a Discord ID:${W} "
+	t_ctrp1="${G}Enter a Discord ID:${W} "
+	t_ctrp2="\nSend the following to Discord bot:\n${G}%s${W}\n"
 	t_done="${G}Done!${W}"
 	t_err="${R}There is no such action!${W}"
 fi
@@ -112,11 +115,12 @@ elif [ "$action" = "register_staking_keys" ]; then
 	./massa-client register_staking_keys $(./massa-client --cli true wallet_info | jq -r ".wallet[0]")
 	printf_n "$t_done"
 elif [ "$action" = "cmd_testnet_rewards_program" ]; then
-	printf "$t_ctrp"
+	printf "$t_ctrp1"
 	read -r discord_id
-	./massa-client --cli true cmd_testnet_rewards_program $address $discord_id
+	resp=`./massa-client --cli true cmd_testnet_rewards_program $address $discord_id | grep -oPm1 "(?<=: )([^%]+)(?=$)"`
+	printf_n "$t_ctrp2" $resp
 else
-	resp=`./massa-client --cli true "$action" 2>&1`
+	resp=`./massa-client --cli true "$action" "${@:3}" 2>&1`
 	if grep -q 'error: Found argument' <<< "$resp"; then
 		printf_n "$t_err"
 	else
