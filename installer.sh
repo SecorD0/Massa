@@ -5,7 +5,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install jq unzip git build-essential pkg-config libssl-dev -y
 echo -e '\e[40m\e[92mNode installation...\e[0m'
-wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/1566540813/artifacts/download
+wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 unzip massa.zip
 rm -rf massa.zip
 sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
@@ -30,8 +30,7 @@ sudo systemctl restart massad
 cd $HOME/massa/massa-client/
 ./massa-client wallet_new_privkey
 wallet_address="null"
-while [ "$wallet_address" = "null" ]
-do
+while [ "$wallet_address" = "null" ]; do
 	wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
 	continue
 done
