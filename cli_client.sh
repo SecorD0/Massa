@@ -26,7 +26,7 @@ while test $# -gt 0; do
 		echo -e "  ${B}-a${W}, --action ACTION      execute the ACTION"
 		echo -e "  ${B}-l${W}, --language LANGUAGE  use the LANGUAGE for texts"
 		echo -e "                           LANGUAGE is '${G}EN${W}' (default), '${G}RU${W}'"
-		echo -e "  ${B}-ro${W}, --raw-output        the raw output in '${G}wallet_info${W}' and ${G}other${W} action"
+		echo -e "  ${B}-ro${W}, --raw-output        the raw output in '${G}wallet_info${W}' and ${G}other${W} actions"
 		echo -e "  ${B}-mb${W}, --max-buy           buy ROLLs for the whole balance"
 		echo
 		echo -e "${G}Arguments${W} - any arguments for actions not specified in the script"
