@@ -1,37 +1,31 @@
 #!/bin/bash
-# Functions
-printf_n(){ printf "$1\n" "${@:2}"; }
-# Colors
-W="\e[0m"
-G="\033[1;32m"
-R="\033[0;31m"
-B="\033[1;34m"
 # Default variables
 action=""
 language="EN"
 raw_output="false"
 max_buy="false"
 # Options
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/del/main/colors.sh)
 option_value(){ echo $1 | sed -e 's%^--[^=]*=%%g; s%^-[^=]*=%%g'; }
 while test $# -gt 0; do
 	case "$1" in
 	-h|--help)
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
-		echo -e "Usage: script ${G}[OPTIONS]${W} ${G}[ARGUMENTS]${W}"
+		echo -e "Usage: script ${C_LGn}[OPTIONS]${RES} ${C_LGn}[ARGUMENTS]${RES}"
 		echo
-		echo -e "You can use ${G}either${W} \"=\" or \" \" as an option and value delimiter"
+		echo -e "You can use ${C_LGn}either${RES} \"=\" or \" \" as an option and value delimiter"
 		echo
-		echo -e "${G}Options${W}:"
+		echo -e "${C_LGn}Options${RES}:"
 		echo -e "  -h, --help               show help page"
 		echo -e "  -a, --action ACTION      execute the ACTION"
-		echo -e "  ${B}-l${W}, --language LANGUAGE  use the LANGUAGE for texts"
-		echo -e "                           LANGUAGE is '${G}EN${W}' (default), '${G}RU${W}'"
-		echo -e "  ${B}-ro${W}, --raw-output        the raw output in '${G}wallet_info${W}' and ${G}other${W} actions"
-		echo -e "  ${B}-mb${W}, --max-buy           buy ROLLs for the whole balance"
+		echo -e "  -l, --language LANGUAGE  use the LANGUAGE for texts"
+		echo -e "                           LANGUAGE is '${C_LGn}EN${RES}' (default), '${C_LGn}RU${RES}'"
+		echo -e "  -ro, --raw-output        the raw output in '${C_LGn}wallet_info${RES}' and ${C_LGn}other${RES} actions"
+		echo -e "  -mb, --max-buy           buy ROLLs for the whole balance"
 		echo
-		echo -e "${G}Arguments${W} - any arguments for actions not specified in the script"
+		echo -e "${C_LGn}Arguments${RES} - any arguments for actions not specified in the script"
 		echo
-		echo -e "${G}Useful URLs${W}:"
+		echo -e "${C_LGn}Useful URLs${RES}:"
 		echo -e "https://github.com/SecorD0/Massa/blob/main/cli_client.sh - script URL"
 		echo -e "https://t.me/letskynode — node Community"
 		echo
@@ -60,49 +54,51 @@ while test $# -gt 0; do
 		;;
 	esac
 done
+# Functions
+printf_n(){ printf "$1\n" "${@:2}"; }
 # Texts
 if [ "$language" = "RU" ]; then
-	t_wi1="${G}Основной кошелёк${W}"
-	t_wi2="Адрес кошелька:  ${G}%s${W}"
-	t_wi3="Публичный ключ:  ${G}%s${W}"
-	t_wi4="Зарегистрирован для стейкинга: ${G}да${W}"
-	t_wi5="Зарегистрирован для стейкинга: ${R}нет${W}"
-	t_wi6="Баланс:          ${G}%.2f${W}"
-	t_wi7="ROLL'ов всего:   ${G}%d${W}"
-	t_wi8="Активные ROLL'ы: ${G}%d${W}"
-	t_br1="${R}Баланс менее 100 токенов${W}"
-	t_br2="Куплено ${G}%d${W} ROLL'ов"
-	t_br3="${G}Введите количество ROLL'ов:${W} "
-	t_br4="${R}Недостаточно${W} токенов для покупки, можно купить ${G}%s${W} ROLL'ов"
-	t_v="Версия ноды: ${G}%s${W}"
-	t_nd1="Запланировано слотов: ${G}%s${W}"
-	t_nd2="Слотов ${R}не запланировано${W}, попробуйте позже ${G}ещё раз${W}"
-	t_ctrp1="${G}Введите Discord ID:${W} "
-	t_ctrp2="\nОтправьте Discord боту следующее:\n${G}%s${W}\n"
-	t_done="${G}Готово!${W}"
-	t_err="${R}Нет такого действия!${W}"
+	t_wi1="${C_LGn}Основной кошелёк${RES}"
+	t_wi2="Адрес кошелька:  ${C_LGn}%s${RES}"
+	t_wi3="Публичный ключ:  ${C_LGn}%s${RES}"
+	t_wi4="Зарегистрирован для стейкинга: ${C_LGn}да${RES}"
+	t_wi5="Зарегистрирован для стейкинга: ${R}нет${RES}"
+	t_wi6="Баланс:          ${C_LGn}%.2f${RES}"
+	t_wi7="ROLL'ов всего:   ${C_LGn}%d${RES}"
+	t_wi8="Активные ROLL'ы: ${C_LGn}%d${RES}"
+	t_br1="${R}Баланс менее 100 токенов${RES}"
+	t_br2="Куплено ${C_LGn}%d${RES} ROLL'ов"
+	t_br3="${C_LGn}Введите количество ROLL'ов:${RES} "
+	t_br4="${R}Недостаточно${RES} токенов для покупки, можно купить ${C_LGn}%s${RES} ROLL'ов"
+	t_v="Версия ноды: ${C_LGn}%s${RES}"
+	t_nd1="Запланировано слотов: ${C_LGn}%s${RES}"
+	t_nd2="Слотов ${R}не запланировано${RES}, попробуйте позже ${C_LGn}ещё раз${RES}"
+	t_ctrp1="${C_LGn}Введите Discord ID:${RES} "
+	t_ctrp2="\nОтправьте Discord боту следующее:\n${C_LGn}%s${RES}\n"
+	t_done="${C_LGn}Готово!${RES}"
+	t_err="${R}Нет такого действия!${RES}"
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
 #elif [ "$language" = ".." ]; then
 else
-	t_wi1="${G}The main wallet${W}"
-	t_wi2="Wallet address: ${G}%s${W}"
-	t_wi3="Public key:  ${G}%s${W}"
-	t_wi4="Registered for staking: ${G}yes${W}"
-	t_wi5="Registered for staking: ${R}no${W}"
-	t_wi6="Balance:        ${G}%.2f${W}"
-	t_wi7="Total ROLLs:    ${G}%d${W}"
-	t_wi8="Active ROLLs:   ${G}%d${W}"
-	t_br1="${R}Balance is less than 100 tokens${W}"
-	t_br2="${G}%d${W} ROLLs were bought"
-	t_br3="${G}Enter a ROLL count:${W} "
-	t_br4="${R}Not enough${W} tokens for buying, you can buy ${G}%s${W} ROLLs"
-	t_v="The node version: ${G}%s${W}"
-	t_nd1="Draws scheduled: ${G}%s${W}"
-	t_nd2="${R}No draws scheduled${W}, try ${G}again later${W}"
-	t_ctrp1="${G}Enter a Discord ID:${W} "
-	t_ctrp2="\nSend the following to Discord bot:\n${G}%s${W}\n"
-	t_done="${G}Done!${W}"
-	t_err="${R}There is no such action!${W}"
+	t_wi1="${C_LGn}The main wallet${RES}"
+	t_wi2="Wallet address: ${C_LGn}%s${RES}"
+	t_wi3="Public key:  ${C_LGn}%s${RES}"
+	t_wi4="Registered for staking: ${C_LGn}yes${RES}"
+	t_wi5="Registered for staking: ${R}no${RES}"
+	t_wi6="Balance:        ${C_LGn}%.2f${RES}"
+	t_wi7="Total ROLLs:    ${C_LGn}%d${RES}"
+	t_wi8="Active ROLLs:   ${C_LGn}%d${RES}"
+	t_br1="${R}Balance is less than 100 tokens${RES}"
+	t_br2="${C_LGn}%d${RES} ROLLs were bought"
+	t_br3="${C_LGn}Enter a ROLL count:${RES} "
+	t_br4="${R}Not enough${RES} tokens for buying, you can buy ${C_LGn}%s${RES} ROLLs"
+	t_v="The node version: ${C_LGn}%s${RES}"
+	t_nd1="Draws scheduled: ${C_LGn}%s${RES}"
+	t_nd2="${R}No draws scheduled${RES}, try ${C_LGn}again later${RES}"
+	t_ctrp1="${C_LGn}Enter a Discord ID:${RES} "
+	t_ctrp2="\nSend the following to Discord bot:\n${C_LGn}%s${RES}\n"
+	t_done="${C_LGn}Done!${RES}"
+	t_err="${R}There is no such action!${RES}"
 fi
 # Actions
 cd $HOME/massa/massa-client/
