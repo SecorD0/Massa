@@ -5,7 +5,7 @@ language="EN"
 raw_output="false"
 max_buy="false"
 # Options
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/del/main/colors.sh)
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/colors.sh)
 option_value(){ echo $1 | sed -e 's%^--[^=]*=%%g; s%^-[^=]*=%%g'; }
 while test $# -gt 0; do
 	case "$1" in
@@ -58,8 +58,8 @@ done
 printf_n(){ printf "$1\n" "${@:2}"; }
 # Texts
 if [ "$language" = "RU" ]; then
-	t_wi1="${C_LGn}Основной кошелёк${RES}"
-	t_wi2="Адрес кошелька:  ${C_LGn}%s${RES}"
+	t_wi1="Адрес кошелька:  ${C_LGn}%s${RES}"
+	t_wi2=" (основной)"
 	t_wi3="Публичный ключ:  ${C_LGn}%s${RES}"
 	t_wi4="Зарегистрирован для стейкинга: ${C_LGn}да${RES}"
 	t_wi5="Зарегистрирован для стейкинга: ${R}нет${RES}"
@@ -80,8 +80,8 @@ if [ "$language" = "RU" ]; then
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
 #elif [ "$language" = ".." ]; then
 else
-	t_wi1="${C_LGn}The main wallet${RES}"
-	t_wi2="Wallet address: ${C_LGn}%s${RES}"
+	t_wi1="Wallet address: ${C_LGn}%s${RES}"
+	t_wi2=" (the main)"
 	t_wi3="Public key:  ${C_LGn}%s${RES}"
 	t_wi4="Registered for staking: ${C_LGn}yes${RES}"
 	t_wi5="Registered for staking: ${R}no${RES}"
@@ -113,14 +113,18 @@ elif [ "$action" = "wallet_info" ]; then
 	else
 		staking_addresses=`./massa-client --cli true staking_addresses`
 		wallets=`jq -r ".balances | to_entries[]" <<< $wallet_info | tr -d '[:space:]' | sed 's%}{%} {%'`
-		printf_n "$t_wi1"
 		for wallet in $wallets; do
 			w_address=`jq -r ".key" <<< $wallet`
 			w_pubkey=`printf "$raw" | grep -B 1 "^Address: ${w_address}" | grep -oP "(?<=^Public key: )([^%]+)(?=$)"`
 			w_balance=`jq -r ".value.candidate_ledger_data.balance" <<< $wallet`
 			w_total_rolls=`jq -r ".value.candidate_rolls" <<< $wallet`
 			w_active_rolls=`jq -r ".value.active_rolls" <<< $wallet`
-			printf_n "$t_wi2" $w_address
+			printf "$t_wi1" $w_address
+			if [ "$w_address" = "$address" ]; then
+				printf_n "$t_wi2"
+			else
+				printf "\n"
+			fi
 			printf_n "$t_wi3" $w_pubkey
 			if grep -q "$w_address" <<< "$staking_addresses"; then
 				printf_n "$t_wi4"
@@ -134,7 +138,7 @@ elif [ "$action" = "wallet_info" ]; then
 		done
 	fi
 elif [ "$action" = "buy_rolls" ]; then
-	balance_float=`jq -r ".balances[].candidate_ledger_data.balance" <<< $wallet_info`
+	balance_float=`jq -r "[.balances[]] | .[0].candidate_ledger_data.balance" <<< $wallet_info`
 	balance=`printf "%d" $balance_float 2> /dev/null`
 	roll_count=$(($balance/100))
 	if [ "$max_buy" = "true" ]; then
