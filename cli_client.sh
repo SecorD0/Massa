@@ -22,8 +22,8 @@ while test $# -gt 0; do
 		echo -e "You can use ${G}either${W} \"=\" or \" \" as an option and value delimiter"
 		echo
 		echo -e "${G}Options${W}:"
-		echo -e "  ${B}-h${W}, --help               show help page"
-		echo -e "  ${B}-a${W}, --action ACTION      execute the ACTION"
+		echo -e "  -h, --help               show help page"
+		echo -e "  -a, --action ACTION      execute the ACTION"
 		echo -e "  ${B}-l${W}, --language LANGUAGE  use the LANGUAGE for texts"
 		echo -e "                           LANGUAGE is '${G}EN${W}' (default), '${G}RU${W}'"
 		echo -e "  ${B}-ro${W}, --raw-output        the raw output in '${G}wallet_info${W}' and ${G}other${W} actions"
