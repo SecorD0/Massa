@@ -41,7 +41,8 @@ while [ "$wallet_address" = "null" ]; do
 	continue
 done
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $wallet_address
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)cd
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
+cd
 echo -e '\e[40m\e[92mDone!\e[0m'
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 echo -e '\nThe node was \e[40m\e[92mupdated\e[0m and \e[40m\e[92mstarted\e[0m!\n'
