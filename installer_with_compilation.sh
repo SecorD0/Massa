@@ -39,12 +39,8 @@ echo -e '\e[40m\e[92mClient installation...\e[0m'
 cd $HOME/massa/massa-client/
 cargo run --release wallet_new_privkey
 massa_wallet_address=$(cargo run --release -- --cli true wallet_info | jq -r ".balances | keys[]")
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $massa_wallet_address
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_log" "journalctl -f -n 100 -u massad" true "massa_status"
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_client" "cd \$HOME/massa/massa-client/; cargo run --release; cd" true
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_info" "cd \$HOME/massa/massa-client/; cargo run --release -- --cli false wallet_info 2> /dev/null; cd" true
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_peers" "cd \$HOME/massa/massa-client/; cargo run --release -- --cli false peers 2> /dev/null; cd" true
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_version" "cd \$HOME/massa/massa-client/; cargo run --release -- --cli false version 2> /dev/null; cd" true
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) -n "massa_wallet_address" -v "$massa_wallet_address"
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 cd
 echo -e '\e[40m\e[92mDone!\e[0m'
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
