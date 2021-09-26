@@ -40,7 +40,7 @@ while [ "$wallet_address" = "null" ]; do
 	wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
 	continue
 done
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) "massa_wallet_address" $wallet_address
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 cd
 echo -e '\e[40m\e[92mDone!\e[0m'
