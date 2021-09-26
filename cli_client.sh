@@ -5,7 +5,7 @@ language="EN"
 raw_output="false"
 max_buy="false"
 # Options
-. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/colors.sh)
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/colors.sh) --
 option_value(){ echo $1 | sed -e 's%^--[^=]*=%%g; s%^-[^=]*=%%g'; }
 while test $# -gt 0; do
 	case "$1" in
@@ -23,7 +23,7 @@ while test $# -gt 0; do
 		echo -e "  -ro, --raw-output        the raw output in '${C_LGn}wallet_info${RES}' and ${C_LGn}other${RES} actions"
 		echo -e "  -mb, --max-buy           buy ROLLs for the whole balance"
 		echo
-		echo -e "${C_LGn}Arguments${RES} - any arguments for actions not specified in the script"
+		echo -e "${C_LGn}Arguments${RES} - any arguments separated by spaces for actions not specified in the script"
 		echo
 		echo -e "${C_LGn}Useful URLs${RES}:"
 		echo -e "https://github.com/SecorD0/Massa/blob/main/cli_client.sh - script URL"
