@@ -19,14 +19,26 @@ while test $# -gt 0; do
 		echo -e "  -l, --language LANGUAGE  use the LANGUAGE for texts"
 		echo -e "                           LANGUAGE is '${C_LGn}EN${RES}' (default), '${C_LGn}RU${RES}'"
 		echo -e "  -ro, --raw-output        the raw output in '${C_LGn}wallet_info${RES}' and ${C_LGn}other${RES} actions"
-		echo -e "  -mb, --max-buy           buy ROLLs for the whole balance"
+		echo -e "  -mb, --max-buy           buy ROLLs for the whole balance when using '${C_LGn}buy_rolls${RES}' command"
 		echo
 		echo -e "You can use ${C_LGn}either${RES} \"=\" or \" \" as an option and value delimiter"
 		echo
 		echo -e "${C_LGn}Arguments${RES} - any arguments separated by spaces for actions not specified in the script"
 		echo
+		echo -e "${C_LGn}Modified actions${RES}:"
+		echo -e "  ${C_C}client${RES}                       launches the official GUI client"
+		echo -e "  ${C_C}wallet_info${RES}                  shows processed/raw wallet info"
+		echo -e "  ${C_C}buy_rolls${RES}                    buys a specified number of ROLLs or for the whole balance"
+		echo -e "  ${C_C}peers${RES}                        shows peers"
+		echo -e "  ${C_C}version${RES}                      shows the node version"
+		echo -e "  ${C_C}next_draws${RES}                   shows next draws"
+		echo -e "  ${C_C}register_staking_keys${RES}        registers the private key created first"
+		echo -e "  ${C_C}cmd_testnet_rewards_program${RES}  after entering the Discord ID it gives you a hash for"
+		echo -e "                               registering in the Discord bot"
+		echo
 		echo -e "${C_LGn}Useful URLs${RES}:"
-		echo -e "https://github.com/SecorD0/Massa/blob/main/cli_client.sh - script URL (you can send Pull request with new texts to add a language)"
+		echo -e "https://github.com/SecorD0/Massa/blob/main/cli_client.sh - script URL"
+		echo -e "         (you can send Pull request with new texts to add a language)"
 		echo -e "https://t.me/letskynode — node Community"
 		echo
 		return 0
