@@ -11,6 +11,9 @@ while test $# -gt 0; do
 	case "$1" in
 	-h|--help)
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
+		echo
+		echo -e "${C_LGn}Functionality${RES}: the script provides advanced CLI client features"
+		echo
 		echo -e "Usage: script ${C_LGn}[OPTIONS]${RES} ${C_LGn}[ARGUMENTS]${RES}"
 		echo
 		echo -e "${C_LGn}Options${RES}:"
