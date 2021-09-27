@@ -154,8 +154,7 @@ elif [ "$action" = "wallet_info" ]; then
 	fi
 elif [ "$action" = "buy_rolls" ]; then
 	balance_float=`jq -r "[.balances[]] | .[0].candidate_ledger_data.balance" <<< $wallet_info`
-	balance=`printf "%d" $balance_float 2> /dev/null`
-	roll_count=`echo "$balance_float/100" | bc -l`
+	roll_count=`printf "%d" $(echo "$balance_float/100" | bc -l) 2>/dev/null`
 	if [ "$max_buy" = "true" ]; then
 		if [ "$roll_count" -eq "0" ]; then
 			printf_n "$t_br1"
