@@ -10,7 +10,7 @@ while test $# -gt 0; do
 	-h|--help)
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 		echo
-		echo -e "${C_LGn}Functionality${RES}: the script installs, updates Massa node, and opens required ports"
+		echo -e "${C_LGn}Functionality${RES}: the script installs, updates a Massa node, and opens required ports"
 		echo
 		echo -e "${C_LGn}Usage${RES}: script ${C_LGn}[OPTIONS]${RES}"
 		echo
