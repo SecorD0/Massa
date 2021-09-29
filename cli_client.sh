@@ -128,7 +128,7 @@ elif [ "$action" = "wallet_info" ]; then
 		printf_n "$raw"
 	else
 		staking_addresses=`./massa-client --cli true staking_addresses`
-		wallets=`jq -r ".balances | to_entries[]" <<< $wallet_info | tr -d '[:space:]' | sed 's%}{%} {%'`
+		wallets=`jq -r ".balances | to_entries[]" <<< $wallet_info | tr -d '[:space:]' | sed 's%}{%} {%g'`
 		for wallet in $wallets; do
 			w_address=`jq -r ".key" <<< $wallet`
 			w_pubkey=`printf "$raw" | grep -B 1 "^Address: ${w_address}" | grep -oP "(?<=^Public key: )([^%]+)(?=$)"`
