@@ -49,7 +49,7 @@ done
 printf_n(){ printf "$1\n" "${@:2}"; }
 ports_opening() {
 	systemctl stop massad
-	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/ports_opening.sh) 31244 31245
+	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/ports_opening.sh) 31244 31245
 	sed -i "s%.*# routable_ip *=.*%routable_ip=\"$(wget -qO- eth0.me)\"%" "$HOME/massa/massa-node/config/config.toml"
 	sudo apt install net-tools -y
 	netstat -ntlp | grep "massa-node"
@@ -92,7 +92,7 @@ EOF
 		wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
 		continue
 	done
-	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
+	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
 	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 	cd
 	printf_n "${C_LGn}Done!${RES}\n"
@@ -138,7 +138,7 @@ ${C_LGn}Client installation...${RES}
 		cd $HOME/massa/massa-client/
 		cargo run --release wallet_new_privkey
 		massa_wallet_address=$(cargo run --release -- --cli true wallet_info | jq -r ".balances | keys[]")
-		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) -n massa_log -v "sudo journalctl -f -n 100 -u massad" -a
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_log -v "sudo journalctl -f -n 100 -u massad" -a
 	else
 		wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 		unzip massa.zip
@@ -167,7 +167,7 @@ EOF
 			wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
 			continue
 		done
-		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 		mkdir $HOME/massa_backup
 		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
