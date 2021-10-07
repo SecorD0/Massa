@@ -66,8 +66,7 @@ elif [ "$type" = "update" ]; then
 	wget -qO massa.zip wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 	unzip massa.zip
 	rm -rf massa.zip
-	sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
-[Unit]
+	printf "[Unit]
 Description=Massa Node
 After=network-online.target
 [Service]
@@ -78,8 +77,7 @@ Restart=on-failure
 RestartSec=3
 LimitNOFILE=65535
 [Install]
-WantedBy=multi-user.target
-EOF
+WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 	sudo systemctl enable massad
 	sudo systemctl daemon-reload
 	sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
@@ -112,8 +110,7 @@ else
 		fi
 		cd $HOME/massa/massa-node/
 		RUST_BACKTRACE=full cargo build --release
-		sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
-[Unit]
+		printf "[Unit]
 Description=Massa Node
 After=network-online.target
 
@@ -126,8 +123,7 @@ RestartSec=3
 LimitNOFILE=65535
 
 [Install]
-WantedBy=multi-user.target
-EOF
+WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
 		sudo systemctl restart massad
@@ -143,8 +139,7 @@ ${C_LGn}Client installation...${RES}
 		wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 		unzip massa.zip
 		rm -rf massa.zip
-		sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
-[Unit]
+		printf "[Unit]
 Description=Massa Node
 After=network-online.target
 [Service]
@@ -155,8 +150,7 @@ Restart=on-failure
 RestartSec=3
 LimitNOFILE=65535
 [Install]
-WantedBy=multi-user.target
-EOF
+WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
 		sudo systemctl restart massad
