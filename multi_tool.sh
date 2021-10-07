@@ -69,6 +69,7 @@ elif [ "$type" = "update" ]; then
 	printf "[Unit]
 Description=Massa Node
 After=network-online.target
+
 [Service]
 User=$USER
 WorkingDirectory=$HOME/massa/massa-node
@@ -76,6 +77,7 @@ ExecStart=$HOME/massa/massa-node/massa-node
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=65535
+
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 	sudo systemctl enable massad
@@ -142,6 +144,7 @@ ${C_LGn}Client installation...${RES}
 		printf "[Unit]
 Description=Massa Node
 After=network-online.target
+
 [Service]
 User=$USER
 WorkingDirectory=$HOME/massa/massa-node
@@ -149,6 +152,7 @@ ExecStart=$HOME/massa/massa-node/massa-node
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=65535
+
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
