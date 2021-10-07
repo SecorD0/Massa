@@ -184,7 +184,7 @@ elif [ "$action" = "next_draws" ]; then
 		printf_n "$t_nd2"
 	fi
 elif [ "$action" = "register_staking_keys" ]; then
-	./massa-client register_staking_keys $(./massa-client --cli true wallet_info | jq -r ".wallet[0]")
+	./massa-client register_staking_keys $(./massa-client --cli true wallet_info | jq -r ".wallet" | jq -r ".[-1][1][1]")
 	printf_n "$t_done"
 elif [ "$action" = "cmd_testnet_rewards_program" ]; then
 	printf "$t_ctrp1"
