@@ -71,6 +71,7 @@ elif [ "$type" = "update" ]; then
 		rm -rf $HOME/massa/	
 		unzip massa.zip
 		rm -rf massa.zip
+		chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 		printf "[Unit]
 Description=Massa Node
 After=network-online.target
@@ -88,7 +89,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
 		sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
-		sed -i "s%.*# routable_ip *=.*%routable_ip=\"$(wget -qO- eth0.me)\"%" "$HOME/massa/massa-node/config/config.toml"
+		ports_opening
 		sed -i 's%bootstrap_list *=.*%bootstrap_list = [ [ "62.171.166.224:31245", "8Cf1sQA9VYyUMcDpDRi2TBHQCuMEB7HgMHHdFcsa13m4g6Ee2h",], [ "149.202.86.103:31245", "5GcSNukkKePWpNSjx9STyoEZniJAN4U4EUzdsQyqhuP3WYf6nj",], [ "149.202.89.125:31245", "5wDwi2GYPniGLzpDfKjXJrmHV3p1rLRmm4bQ9TUWNVkpYmd4Zm",], [ "158.69.120.215:31245", "5QbsTjSoKzYc8uBbwPCap392CoMQfZ2jviyq492LZPpijctb9c",], [ "158.69.23.120:31245", "8139kbee951YJdwK99odM7e6V3eW7XShCfX5E2ovG3b9qxqqrq",],]%' "$HOME/massa/massa-node/base_config/config.toml"
 		sudo systemctl restart massad
 		cd $HOME/massa/massa-client/
@@ -137,6 +138,7 @@ LimitNOFILE=65535
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
+		ports_opening
 		sudo systemctl restart massad
 		printf_n "
 ${C_LGn}Done!${RES}
@@ -167,9 +169,11 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sed -i 's%bootstrap_list *=.*%bootstrap_list = [ [ "62.171.166.224:31245", "8Cf1sQA9VYyUMcDpDRi2TBHQCuMEB7HgMHHdFcsa13m4g6Ee2h",], [ "149.202.86.103:31245", "5GcSNukkKePWpNSjx9STyoEZniJAN4U4EUzdsQyqhuP3WYf6nj",], [ "149.202.89.125:31245", "5wDwi2GYPniGLzpDfKjXJrmHV3p1rLRmm4bQ9TUWNVkpYmd4Zm",], [ "158.69.120.215:31245", "5QbsTjSoKzYc8uBbwPCap392CoMQfZ2jviyq492LZPpijctb9c",], [ "158.69.23.120:31245", "8139kbee951YJdwK99odM7e6V3eW7XShCfX5E2ovG3b9qxqqrq",],]%' "$HOME/massa/massa-node/base_config/config.toml"
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
+		ports_opening
+		sed -i 's%bootstrap_list *=.*%bootstrap_list = [ [ "62.171.166.224:31245", "8Cf1sQA9VYyUMcDpDRi2TBHQCuMEB7HgMHHdFcsa13m4g6Ee2h",], [ "149.202.86.103:31245", "5GcSNukkKePWpNSjx9STyoEZniJAN4U4EUzdsQyqhuP3WYf6nj",], [ "149.202.89.125:31245", "5wDwi2GYPniGLzpDfKjXJrmHV3p1rLRmm4bQ9TUWNVkpYmd4Zm",], [ "158.69.120.215:31245", "5QbsTjSoKzYc8uBbwPCap392CoMQfZ2jviyq492LZPpijctb9c",], [ "158.69.23.120:31245", "8139kbee951YJdwK99odM7e6V3eW7XShCfX5E2ovG3b9qxqqrq",],]%' "$HOME/massa/massa-node/base_config/config.toml"
 		sudo systemctl restart massad
 		cd $HOME/massa/massa-client/
-		./massa-client wallet_new_privkey
+		if [ ! -d $HOME/massa_backup ]; then ./massa-client wallet_new_privkey; fi
 		wallet_address="null"
 		while [ "$wallet_address" = "null" ]; do
 			wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
@@ -177,11 +181,12 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		done
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
-		mkdir $HOME/massa_backup
-		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
-		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+		if [ ! -d $HOME/massa_backup ]; then
+			mkdir $HOME/massa_backup
+			sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+			sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+		fi
 	fi
-	ports_opening
 	printf_n "${C_LGn}Done!${RES}"
 	cd
 	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
