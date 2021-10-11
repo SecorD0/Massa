@@ -58,6 +58,7 @@ ports_opening() {
 # Actions
 sudo apt install wget -y
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
+cd
 if [ "$type" = "open_ports" ]; then
 	ports_opening
 elif [ "$type" = "update" ]; then
@@ -65,11 +66,13 @@ elif [ "$type" = "update" ]; then
 	mkdir $HOME/massa_backup
 	sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 	sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
-	wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux && \
-	rm -rf $HOME/massa/	
-	unzip massa.zip
-	rm -rf massa.zip
-	printf "[Unit]
+	sudo apt install curl
+	curl -fso massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
+	if [ -f massa.zip ]; then
+		rm -rf $HOME/massa/	
+		unzip massa.zip
+		rm -rf massa.zip
+		printf "[Unit]
 Description=Massa Node
 After=network-online.target
 
@@ -83,23 +86,26 @@ LimitNOFILE=65535
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
-	sudo systemctl enable massad
-	sudo systemctl daemon-reload
-	sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
-	sed -i "s%.*# routable_ip *=.*%routable_ip=\"$(wget -qO- eth0.me)\"%" "$HOME/massa/massa-node/config/config.toml"
-	sed -i 's%bootstrap_list *=.*%bootstrap_list = [ [ "62.171.166.224:31245", "8Cf1sQA9VYyUMcDpDRi2TBHQCuMEB7HgMHHdFcsa13m4g6Ee2h",], [ "149.202.86.103:31245", "5GcSNukkKePWpNSjx9STyoEZniJAN4U4EUzdsQyqhuP3WYf6nj",], [ "149.202.89.125:31245", "5wDwi2GYPniGLzpDfKjXJrmHV3p1rLRmm4bQ9TUWNVkpYmd4Zm",], [ "158.69.120.215:31245", "5QbsTjSoKzYc8uBbwPCap392CoMQfZ2jviyq492LZPpijctb9c",], [ "158.69.23.120:31245", "8139kbee951YJdwK99odM7e6V3eW7XShCfX5E2ovG3b9qxqqrq",],]%' "$HOME/massa/massa-node/base_config/config.toml"
-	sudo systemctl restart massad
-	cd $HOME/massa/massa-client/
-	sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat
-	wallet_address="null"
-	while [ "$wallet_address" = "null" ]; do
-		wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
-		continue
-	done
-	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
-	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
-	cd
-	printf_n "${C_LGn}Done!${RES}\n"
+		sudo systemctl enable massad
+		sudo systemctl daemon-reload
+		sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
+		sed -i "s%.*# routable_ip *=.*%routable_ip=\"$(wget -qO- eth0.me)\"%" "$HOME/massa/massa-node/config/config.toml"
+		sed -i 's%bootstrap_list *=.*%bootstrap_list = [ [ "62.171.166.224:31245", "8Cf1sQA9VYyUMcDpDRi2TBHQCuMEB7HgMHHdFcsa13m4g6Ee2h",], [ "149.202.86.103:31245", "5GcSNukkKePWpNSjx9STyoEZniJAN4U4EUzdsQyqhuP3WYf6nj",], [ "149.202.89.125:31245", "5wDwi2GYPniGLzpDfKjXJrmHV3p1rLRmm4bQ9TUWNVkpYmd4Zm",], [ "158.69.120.215:31245", "5QbsTjSoKzYc8uBbwPCap392CoMQfZ2jviyq492LZPpijctb9c",], [ "158.69.23.120:31245", "8139kbee951YJdwK99odM7e6V3eW7XShCfX5E2ovG3b9qxqqrq",],]%' "$HOME/massa/massa-node/base_config/config.toml"
+		sudo systemctl restart massad
+		cd $HOME/massa/massa-client/
+		sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat
+		wallet_address="null"
+		while [ "$wallet_address" = "null" ]; do
+			wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
+			continue
+		done
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
+		cd
+		printf_n "${C_LGn}Done!${RES}\n"
+	else
+		printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
+	fi
 else
 	sudo apt update
 	sudo apt upgrade -y
@@ -110,7 +116,6 @@ else
 		. $HOME/.cargo/env
 		rustup toolchain install nightly
 		rustup default nightly
-		cd
 		if [ ! -d $HOME/massa/ ]; then
 			git clone --branch testnet https://gitlab.com/massalabs/massa.git
 		fi
