@@ -62,8 +62,11 @@ if [ "$type" = "open_ports" ]; then
 	ports_opening
 elif [ "$type" = "update" ]; then
 	printf_n "${C_LGn}Node updating...${RES}"
-	rm -rf $HOME/massa/
-	wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
+	mkdir $HOME/massa_backup
+	sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+	sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+	wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux && \
+	rm -rf $HOME/massa/	
 	unzip massa.zip
 	rm -rf massa.zip
 	printf "[Unit]
