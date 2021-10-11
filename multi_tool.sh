@@ -70,7 +70,6 @@ elif [ "$type" = "update" ]; then
 	if [ `wc -c < "massa.zip"` -ge 1000 ]; then
 		rm -rf $HOME/massa/	
 		unzip massa.zip
-		rm -rf massa.zip
 		chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 		printf "[Unit]
 Description=Massa Node
@@ -104,9 +103,9 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		cd
 		printf_n "${C_LGn}Done!${RES}\n"
 	else
-		rm -rf massa.zip
 		printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
 	fi
+	rm -rf massa.zip
 else
 	sudo apt update
 	sudo apt upgrade -y
