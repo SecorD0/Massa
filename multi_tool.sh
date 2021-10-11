@@ -63,7 +63,7 @@ if [ "$type" = "open_ports" ]; then
 elif [ "$type" = "update" ]; then
 	printf_n "${C_LGn}Node updating...${RES}"
 	rm -rf $HOME/massa/
-	wget -qO massa.zip wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
+	wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 	unzip massa.zip
 	rm -rf massa.zip
 	printf "[Unit]
