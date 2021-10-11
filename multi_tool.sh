@@ -66,9 +66,8 @@ elif [ "$type" = "update" ]; then
 	mkdir $HOME/massa_backup
 	sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 	sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
-	sudo apt install curl
-	curl -fso massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
-	if [ -f massa.zip ]; then
+	wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
+	if [ `wc -c < "massa.zip"` -ge 1000 ]; then
 		rm -rf $HOME/massa/	
 		unzip massa.zip
 		rm -rf massa.zip
@@ -104,6 +103,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		cd
 		printf_n "${C_LGn}Done!${RES}\n"
 	else
+		rm -rf massa.zip
 		printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
 	fi
 else
