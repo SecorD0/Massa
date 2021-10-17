@@ -19,7 +19,6 @@ while test $# -gt 0; do
 		echo
 		echo -e "${C_LGn}Options${RES}:"
 		echo -e "  -h, --help               show help page"
-		echo -e "  -iv                      insert variables"
 		echo -e "  -a, --action ACTION      execute the ACTION"
 		echo -e "  -l, --language LANGUAGE  use the LANGUAGE for texts"
 		echo -e "                           LANGUAGE is '${C_LGn}EN${RES}' (default), '${C_LGn}RU${RES}'"
@@ -47,10 +46,6 @@ while test $# -gt 0; do
 		echo -e "https://t.me/letskynode — node Community"
 		echo
 		return 0 2>/dev/null; exit 0
-		;;
-	-iv)
-		insert_variables="true"
-		shift
 		;;
 	-a*|--action*)
 		if ! grep -q "=" <<< $1; then shift; fi
@@ -122,11 +117,6 @@ else
 	t_err="${C_LR}There is no such action!${RES}"
 fi
 # Actions
-if [ "$insert_variables" = "true" ]; then
-	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
-	printf_n "$t_done"
-	return 0 2>/dev/null; exit 0
-fi
 sudo apt install bc -y &>/dev/null
 cd $HOME/massa/massa-client/
 wallet_info=`./massa-client --cli true wallet_info`
