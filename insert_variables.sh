@@ -1,5 +1,12 @@
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_log -v "sudo journalctl -f -n 100 -u massad" -a
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_client -v "cd $HOME/massa/massa-client/ && ./massa-client; cd" -a
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_cli_client -d
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_wallet_info -v "cd $HOME/massa/massa-client/ && ./massa-client wallet_info; cd" -a
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_buy_rolls -d
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_peers -v "cd $HOME/massa/massa-client/ && ./massa-client peers; cd" -a
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_version -v "cd $HOME/massa/massa-client/ && ./massa-client version; cd" -a
+. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_next_draws -v "cd $HOME/massa/massa-client/ && ./massa-client next_draws; cd" -a
+
 #. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_client -v ". <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/cli_client.sh) -l RU -a client" -a
 #. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_cli_client -v ". <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/cli_client.sh) -l RU" -a
 #. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_wallet_info -v ". <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/cli_client.sh) -l RU -a wallet_info" -a
