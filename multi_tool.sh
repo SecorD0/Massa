@@ -62,9 +62,11 @@ EOF
 }
 update() {
 	printf_n "${C_LGn}Node updating...${RES}"
-	mkdir $HOME/massa_backup
-	sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
-	sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+	if [ ! -d $HOME/massa_backup ]; then
+		mkdir $HOME/massa_backup
+		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+	fi
 	wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
 	if [ `wc -c < "massa.zip"` -ge 1000 ]; then
 		rm -rf $HOME/massa/	
@@ -113,9 +115,10 @@ install() {
 		sudo apt install unzip jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
 		wget -qO massa.zip https://gitlab.com/massalabs/massa/-/jobs/artifacts/testnet/download?job=build-linux
-		unzip massa.zip
-		rm -rf massa.zip
-		printf "[Unit]
+		if [ `wc -c < "massa.zip"` -ge 1000 ]; then
+			unzip massa.zip
+			rm -rf massa.zip
+			printf "[Unit]
 Description=Massa Node
 After=network-online.target
 
@@ -129,32 +132,32 @@ LimitNOFILE=65535
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
-		sudo systemctl enable massad
-		sudo systemctl daemon-reload
-		open_ports
-		cd $HOME/massa/massa-client/
-		if [ ! -d $HOME/massa_backup ]; then
-			./massa-client wallet_new_privkey
-		else
-			sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
-			sudo systemctl restart massad
-			sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat	
-		fi
-		#local wallet_address="null"
-		#while [ "$wallet_address" = "null" ]; do
-		#	local wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
-		#done
-		#. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
-		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
-		if [ ! -d $HOME/massa_backup ]; then
-			mkdir $HOME/massa_backup
-			sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
-			sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
-		fi
-		printf_n "${C_LGn}Done!${RES}"
-		cd
-		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
-		printf_n "
+			sudo systemctl enable massad
+			sudo systemctl daemon-reload
+			open_ports
+			cd $HOME/massa/massa-client/
+			if [ ! -d $HOME/massa_backup ]; then
+				./massa-client wallet_new_privkey
+			else
+				sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
+				sudo systemctl restart massad
+				sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat	
+			fi
+			#local wallet_address="null"
+			#while [ "$wallet_address" = "null" ]; do
+			#	local wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
+			#done
+			#. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
+			. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
+			if [ ! -d $HOME/massa_backup ]; then
+				mkdir $HOME/massa_backup
+				sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+				sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+			fi
+			printf_n "${C_LGn}Done!${RES}"
+			cd
+			. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
+			printf_n "
 The node was ${C_LGn}started${RES}.
 
 Remember to save files in this directory:
@@ -167,7 +170,11 @@ To view the node status: ${C_LGn}sudo systemctl status massad${RES}
 To view the node log: ${C_LGn}massa_log${RES}
 To restart the node: ${C_LGn}sudo systemctl restart massad${RES}
 "
-fi
+		else
+			rm -rf massa.zip
+			printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
+		fi
+	fi
 }
 install_source() {
 	if [ -d $HOME/massa/ ]; then
@@ -178,10 +185,6 @@ install_source() {
 		sudo apt install unzip jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/installers/rust.sh) -n
-		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-		. $HOME/.cargo/env
-		rustup toolchain install nightly
-		rustup default nightly
 		if [ ! -d $HOME/massa/ ]; then
 			git clone --branch testnet https://gitlab.com/massalabs/massa.git
 		fi
