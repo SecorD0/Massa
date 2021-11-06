@@ -52,6 +52,8 @@ printf_n(){ printf "$1\n" "${@:2}"; }
 open_ports() {
 	sudo systemctl stop massad
 	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/ports_opening.sh) 31244 31245
+	sed -i -e "s%^bind_private *=.*%bind_private = \"127.0.0.1:33034\"%; s%^bind_public *=.*%bind_public = \"0.0.0.0:33035\"%;" "$HOME/massa/massa-node/base_config/config.toml"
+	sed -i -e "s%.*ip *=.*%ip = \"127.0.0.1\"%;" "$HOME/massa/massa-client/base_config/config.toml"
 	sudo tee <<EOF >/dev/null $HOME/massa/massa-node/config/config.toml
 [network]
 routable_ip = "`wget -qO- eth0.me`"
