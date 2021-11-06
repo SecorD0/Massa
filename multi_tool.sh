@@ -17,7 +17,6 @@ while test $# -gt 0; do
 		echo
 		echo -e "${C_LGn}Options${RES}:"
 		echo -e "  -h, --help         show the help page"
-		echo -e "  -up, --update      update the node"
 		echo -e "  -op, --open-ports  open required ports"
 		echo -e "  -s, --source       install the node using a source code"
 		echo
@@ -28,10 +27,6 @@ while test $# -gt 0; do
 		echo -e "https://t.me/letskynode — node Community"
 		echo
 		return 0
-		;;
-	-up|--update)
-		function="update"
-		shift
 		;;
 	-op|--open-ports)
 		function="open_ports"
