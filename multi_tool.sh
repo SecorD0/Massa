@@ -84,8 +84,6 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
 		sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
-		sed -i -e "s%^bind_private *=.*%bind_private = \"127.0.0.1:33034\"%; s%^bind_public *=.*%bind_public = \"0.0.0.0:33035\"%;" "$HOME/massa/massa-node/base_config/config.toml"
-		sed -i -e "s%.*ip *=.*%ip = \"127.0.0.1\"%;" "$HOME/massa/massa-client/base_config/config.toml"
 		open_ports
 		cd $HOME/massa/massa-client/
 		sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat
@@ -131,8 +129,6 @@ LimitNOFILE=65535
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 			sudo systemctl enable massad
 			sudo systemctl daemon-reload
-			sed -i -e "s%^bind_private *=.*%bind_private = \"127.0.0.1:33034\"%; s%^bind_public *=.*%bind_public = \"0.0.0.0:33035\"%;" "$HOME/massa/massa-node/base_config/config.toml"
-			sed -i -e "s%.*ip *=.*%ip = \"127.0.0.1\"%;" "$HOME/massa/massa-client/base_config/config.toml"
 			open_ports
 			cd $HOME/massa/massa-client/
 			if [ ! -d $HOME/massa_backup ]; then
@@ -205,8 +201,6 @@ LimitNOFILE=65535
 WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		sudo systemctl enable massad
 		sudo systemctl daemon-reload
-		sed -i -e "s%^bind_private *=.*%bind_private = \"127.0.0.1:33034\"%; s%^bind_public *=.*%bind_public = \"0.0.0.0:33035\"%;" "$HOME/massa/massa-node/base_config/config.toml"
-		sed -i -e "s%.*ip *=.*%ip = \"127.0.0.1\"%;" "$HOME/massa/massa-client/base_config/config.toml"
 		open_ports
 		printf_n "
 ${C_LGn}Done!${RES}
