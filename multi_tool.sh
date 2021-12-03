@@ -62,7 +62,8 @@ update() {
 		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
-	wget -qO massa.zip https://github.com/massalabs/massa/releases/download/TEST.5.0/release_linux.zip
+	local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
+	wget -qO massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
 	if [ `wc -c < "massa.zip"` -ge 1000 ]; then
 		rm -rf $HOME/massa/	
 		unzip massa.zip
@@ -109,7 +110,8 @@ install() {
 		sudo apt upgrade -y
 		sudo apt install unzip jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
-		wget -qO massa.zip https://github.com/massalabs/massa/releases/download/TEST.5.0/release_linux.zip
+		local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
+		wget -qO massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
 		if [ `wc -c < "massa.zip"` -ge 1000 ]; then
 			unzip massa.zip
 			rm -rf massa.zip
