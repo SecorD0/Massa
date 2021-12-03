@@ -63,10 +63,11 @@ update() {
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
 	local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
-	wget -qO massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
+	wget -qO $HOME/massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
 	if [ `wc -c < "massa.zip"` -ge 1000 ]; then
-		rm -rf $HOME/massa/	
-		unzip massa.zip
+		rm -rf $HOME/massa/
+		unzip $HOME/massa.zip -d $HOME/massa/
+		rm -rf $HOME/massa.zip
 		chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 		printf "[Unit]
 Description=Massa Node
@@ -110,11 +111,13 @@ install() {
 		sudo apt upgrade -y
 		sudo apt install unzip jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
+		mkdir -p $HOME/massa/
+		cd $HOME/massa/
 		local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
-		wget -qO massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
+		wget -qO $HOME/massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
 		if [ `wc -c < "massa.zip"` -ge 1000 ]; then
-			unzip massa.zip
-			rm -rf massa.zip
+			unzip $HOME/massa.zip -d $HOME/massa/
+			rm -rf $HOME/massa.zip
 			printf "[Unit]
 Description=Massa Node
 After=network-online.target
@@ -233,7 +236,7 @@ To restart the node: ${C_LGn}sudo systemctl restart massad${RES}
 
 
 # Actions
-sudo apt install wget -y
+sudo apt install wget -y &>/dev/null
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 cd
 $function
