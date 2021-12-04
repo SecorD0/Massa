@@ -185,7 +185,7 @@ node_info() {
 		else
 			printf_n "$t_ni5"
 		fi
-		print_n
+		printf_n
 		local incoming_connections=`jq -r ".network_stats.in_connection_count" <<< "$node_info"`
 		if [ "$incoming_connections" -gt 0 ]; then
 			printf_n "$t_ni6"
