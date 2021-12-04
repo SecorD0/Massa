@@ -86,7 +86,7 @@ if [ "$language" = "RU" ]; then
 	t_ni5="Запланировано слотов:   ${C_R}0${RES} (попробуйте позже ${C_LGn}ещё раз${RES})"
 	
 	t_ni6="Порты открыты:          ${C_LGn}да${RES}"
-	t_ni7="Порты открыты:          ${C_R}нет${RES}"
+	t_ni7="Порты открыты:          ${C_R}нет${RES} (попробуйте позже ${C_LGn}ещё раз${RES})"
 	t_ni8="Входящих подключений:   ${C_LGn}%d${RES}"
 	t_ni9="Исходящих подключений:  ${C_LGn}%d${RES}\n\n"
 	t_ni10="   Кошельки"
@@ -128,7 +128,7 @@ else
 	t_ni4="Draws scheduled:        ${C_LGn}%d${RES}"
 	t_ni5="Draws scheduled:        ${C_R}0${RES} (try ${C_LGn}again later${RES})"
 	t_ni6="Ports opened:           ${C_LGn}yes${RES}"
-	t_ni7="Ports opened:           ${C_R}no${RES}"
+	t_ni7="Ports opened:           ${C_R}no${RES} (try ${C_LGn}again later${RES})"
 	t_ni8="Incoming connections:   ${C_LGn}%d${RES}"
 	t_ni9="Outcoming connections:  ${C_LGn}%d${RES}\n\n"
 	t_ni10="   Wallets"
