@@ -4,7 +4,9 @@ insert_variables="false"
 action=""
 language="EN"
 raw_output="false"
+private_keys="false"
 max_buy="false"
+
 # Options
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/colors.sh) --
 option_value(){ echo $1 | sed -e 's%^--[^=]*=%%g; s%^-[^=]*=%%g'; }
@@ -22,8 +24,9 @@ while test $# -gt 0; do
 		echo -e "  -a, --action ACTION      execute the ACTION"
 		echo -e "  -l, --language LANGUAGE  use the LANGUAGE for texts"
 		echo -e "                           LANGUAGE is '${C_LGn}EN${RES}' (default), '${C_LGn}RU${RES}'"
-		echo -e "  -ro, --raw-output        the raw output in '${C_LGn}wallet_info${RES}' and ${C_LGn}other${RES} actions"
+		echo -e "  -pk, --private-keys      show private keys of wallets in '${C_LGn}node_info${RES}' and '${C_LGn}wallet_info${RES}' commands (${C_R}unsafe${RES})"
 		echo -e "  -mb, --max-buy           buy ROLLs for the whole balance when using '${C_LGn}buy_rolls${RES}' command"
+		echo -e "  -ro, --raw-output        the raw output in '${C_LGn}node_info${RES}', '${C_LGn}wallet_info${RES}' and ${C_LGn}other${RES} actions"
 		echo
 		echo -e "You can use ${C_LGn}either${RES} \"=\" or \" \" as an option and value delimiter"
 		echo
@@ -31,10 +34,9 @@ while test $# -gt 0; do
 		echo
 		echo -e "${C_LGn}Modified actions${RES}:"
 		echo -e "  ${C_C}client${RES}                       launches the official GUI client"
+		echo -e "  ${C_C}node_info${RES}                    shows processed node and wallet info or raw node info"
 		echo -e "  ${C_C}wallet_info${RES}                  shows processed/raw wallet info"
 		echo -e "  ${C_C}buy_rolls${RES}                    buys a specified number of ROLLs or for the whole balance"
-		echo -e "  ${C_C}peers${RES}                        shows peers"
-		echo -e "  ${C_C}version${RES}                      shows the node version"
 		echo -e "  ${C_C}next_draws${RES}                   shows next draws"
 		echo -e "  ${C_C}register_staking_keys${RES}        registers the private key created first"
 		echo -e "  ${C_C}cmd_testnet_rewards_program${RES}  after entering the Discord ID it gives you a hash for"
@@ -57,12 +59,16 @@ while test $# -gt 0; do
 		language=`option_value $1`
 		shift
 		;;
-	-ro|--raw-output)
-		raw_output="true"
+	-pk|--private-keys)
+		private_keys="true"
 		shift
 		;;
 	-mb|--max-buy)
 		max_buy="true"
+		shift
+		;;
+	-ro|--raw-output)
+		raw_output="true"
 		shift
 		;;
 	*|--)
@@ -70,136 +76,234 @@ while test $# -gt 0; do
 		;;
 	esac
 done
-# Functions
-printf_n(){ printf "$1\n" "${@:2}"; }
+
 # Texts
 if [ "$language" = "RU" ]; then
+	t_ni1="\nID ноды:                ${C_LGn}%s${RES}"
+	t_ni2="Версия ноды:            ${C_LGn}%s${RES}\n"
+	
+	t_ni3="Текущий цикл:           ${C_LGn}%d${RES}"
+	t_ni4="Запланировано слотов:   ${C_LGn}%d${RES}"
+	t_ni5="Запланировано слотов:   ${C_R}0${RES} (попробуйте позже ${C_LGn}ещё раз${RES})"
+	t_ni6="Порты открыты:          ${C_LGn}да${RES}"
+	t_ni7="Порты открыты:          ${C_R}нет${RES}"
+	t_ni8="Входящих подключений:   ${C_LGn}%d${RES}"
+	t_ni9="Исходящих подключений:  ${C_LGn}%d${RES}\n\n"
+	t_ni10="   Кошельки"
+	
+	
 	t_wi1="Адрес кошелька:  ${C_LGn}%s${RES}"
-	t_wi2=" (основной)"
-	t_wi3="Публичный ключ:  ${C_LGn}%s${RES}"
-	t_wi4="Зарегистрирован для стейкинга: ${C_LGn}да${RES}"
-	t_wi5="Зарегистрирован для стейкинга: ${C_R}нет${RES}"
-	t_wi6="Баланс:          ${C_LGn}%.2f${RES}"
-	t_wi7="ROLL'ов всего:   ${C_LGn}%d${RES}"
-	t_wi8="Активные ROLL'ы: ${C_LGn}%d${RES}"
-	t_br1="${C_LR}Баланс менее 100 токенов${RES}"
+	t_wi2=" (${C_LGn}основной${RES})"
+	t_wi3="Приватный ключ:  ${C_LGn}%s${RES} (${C_R}никому не показывать${RES})"
+	t_wi4="Публичный ключ:  ${C_LGn}%s${RES}"
+	t_wi5="Зарегистрирован\nдля стейкинга:   ${C_LGn}да${RES}"
+	t_wi6="Зарегистрирован\nдля стейкинга:   ${C_R}нет${RES}"
+	t_wi7="Баланс:          ${C_LGn}%.2f${RES}"
+	t_wi8="ROLL'ов всего:   ${C_LGn}%d${RES}"
+	t_wi9="Активные ROLL'ы: ${C_LGn}%d${RES}"
+	
+	
+	t_br1="${C_R}Баланс менее 100 токенов${RES}"
 	t_br2="Куплено ${C_LGn}%d${RES} ROLL'ов"
-	t_br3="${C_LGn}Введите количество ROLL'ов:${RES} "
-	t_br4="${C_LR}Недостаточно${RES} токенов для покупки, можно купить ${C_LGn}%s${RES} ROLL'ов"
-	t_v="Версия ноды: ${C_LGn}%s${RES}"
-	t_nd1="Запланировано слотов: ${C_LGn}%s${RES}"
-	t_nd2="Слотов ${C_LR}не запланировано${RES}, попробуйте позже ${C_LGn}ещё раз${RES}"
+	t_br3="Введите количество ROLL'ов (максимально ${C_LGn}%d${RES}): "
+	t_br4="${C_R}Недостаточно токенов для покупки${RES}"
+	
+	
+	t_rpk="${C_R}Не удалось зарегистрировать ключ для стейкинга${RES}"
+	
+	
 	t_ctrp1="${C_LGn}Введите Discord ID:${RES} "
 	t_ctrp2="\nОтправьте Discord боту следующее:\n${C_LGn}%s${RES}\n"
+	
+	
 	t_done="${C_LGn}Готово!${RES}"
-	t_err="${C_LR}Нет такого действия!${RES}"
+	t_err="${C_R}Нет такого действия!${RES}"
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
 #elif [ "$language" = ".." ]; then
 else
-	t_wi1="Wallet address: ${C_LGn}%s${RES}"
-	t_wi2=" (the main)"
-	t_wi3="Public key:  ${C_LGn}%s${RES}"
-	t_wi4="Registered for staking: ${C_LGn}yes${RES}"
-	t_wi5="Registered for staking: ${C_LR}no${RES}"
-	t_wi6="Balance:        ${C_LGn}%.2f${RES}"
-	t_wi7="Total ROLLs:    ${C_LGn}%d${RES}"
-	t_wi8="Active ROLLs:   ${C_LGn}%d${RES}"
-	t_br1="${C_LR}Balance is less than 100 tokens${RES}"
+	t_ni1="\nNode ID:                ${C_LGn}%s${RES}"
+	t_ni2="Node version:           ${C_LGn}%s${RES}\n"
+	
+	t_ni3="Currnet cycle:          ${C_LGn}%d${RES}"
+	t_ni4="Draws scheduled:        ${C_LGn}%d${RES}"
+	t_ni5="Draws scheduled:        ${C_R}0${RES} (try ${C_LGn}again later${RES})"
+	t_ni6="Ports opened:           ${C_LGn}yes${RES}"
+	t_ni7="Ports opened:           ${C_R}no${RES}"
+	t_ni8="Incoming connections:   ${C_LGn}%d${RES}"
+	t_ni9="Outcoming connections:  ${C_LGn}%d${RES}\n\n"
+	t_ni10="   Wallets"
+	
+	
+	t_wi1="Wallet address:  ${C_LGn}%s${RES}"
+	t_wi2=" (${C_LGn}the main${RES})"
+	t_wi3="Private key:     ${C_LGn}%s${RES} (${C_R}don't show it to anyone${RES})"
+	t_wi4="Public key:      ${C_LGn}%s${RES}"
+	t_wi5="Registered\nfor staking:     ${C_LGn}yes${RES}"
+	t_wi6="Registered\nfor staking:     ${C_R}no${RES}"
+	t_wi7="Balance:         ${C_LGn}%.2f${RES}"
+	t_wi8="Total ROLLs:     ${C_LGn}%d${RES}"
+	t_wi9="Active ROLLs:    ${C_LGn}%d${RES}"
+	
+	
+	t_br1="${C_R}Balance is less than 100 tokens${RES}"
 	t_br2="${C_LGn}%d${RES} ROLLs were bought"
-	t_br3="${C_LGn}Enter a ROLL count:${RES} "
-	t_br4="${C_LR}Not enough${RES} tokens for buying, you can buy ${C_LGn}%s${RES} ROLLs"
-	t_v="The node version: ${C_LGn}%s${RES}"
-	t_nd1="Draws scheduled: ${C_LGn}%s${RES}"
-	t_nd2="${C_LR}No draws scheduled${RES}, try ${C_LGn}again later${RES}"
+	t_br3="Enter a ROLL count (max ${C_LGn}%d${RES}): "
+	t_br4="${C_R}Not enough tokens for buying${RES}"
+	
+	
+	t_rpk="${C_R}Failed to register a key for staking!${RES}"
+	
+	
 	t_ctrp1="${C_LGn}Enter a Discord ID:${RES} "
 	t_ctrp2="\nSend the following to Discord bot:\n${C_LGn}%s${RES}\n"
+	
+	
 	t_done="${C_LGn}Done!${RES}"
-	t_err="${C_LR}There is no such action!${RES}"
+	t_err="${C_R}There is no such action!${RES}"
 fi
-# Actions
-sudo apt install bc -y &>/dev/null
-cd $HOME/massa/massa-client/
-wallet_info=`./massa-client --cli true wallet_info`
-address=`jq -r ".balances | keys[0]" <<< $wallet_info`
-if [ "$action" = "client" ]; then
-	./massa-client
-elif [ "$action" = "wallet_info" ]; then
-	raw=`./massa-client --cli false wallet_info`
+
+# Functions
+printf_n(){ printf "$1\n" "${@:2}"; }
+client() { ./massa-client; }
+node_info() {
+	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
+	local node_info=`./massa-client -j get_status | jq`
 	if [ "$raw_output" = "true" ]; then
-		printf_n "$raw"
+		printf_n "$node_info"
 	else
-		staking_addresses=`./massa-client --cli true staking_addresses`
-		wallets=`jq -r ".balances | to_entries[]" <<< $wallet_info | tr -d '[:space:]' | sed 's%}{%} {%g'`
+		local node_id=`jq -r ".node_id" <<< "$node_info"`
+		printf_n "$t_ni1" "$node_id"
+		local node_version=`jq -r ".version" <<< "$node_info"`
+		printf_n "$t_ni2" "$node_version"
+		local current_cycle=`jq -r ".current_cycle" <<< "$node_info"`
+		printf_n "$t_ni3" "$current_cycle"
+		
+		local draws_count=`./massa-client -j get_addresses "$main_address" | jq -r ".[0].block_draws | length"`
+		if [ "$draws_count" -gt 0 ]; then
+			printf_n "$t_ni4" "$draws_count"
+		else
+			printf_n "$t_ni5"
+		fi
+		
+		local incoming_connections=`jq -r ".network_stats.in_connection_count" <<< "$node_info"`
+		if [ "$incoming_connections" -gt 0 ]; then
+			printf_n "$t_ni6"
+		else
+			printf_n "$t_ni7"
+		fi
+		printf_n "$t_ni8" "$incoming_connections"
+		local outcoming_connections=`jq -r ".network_stats.out_connection_count" <<< "$node_info"`
+		printf_n "$t_ni9" "$outcoming_connections"
+		printf_n "$t_ni10"
+		wallet_info
+	fi
+}
+wallet_info() {
+	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
+	if [ "$raw_output" = "true" ]; then
+		printf_n "`jq -r "[.[]]" <<< "$wallet_info"`"
+	else
+		local staking_addresses=`./massa-client -j node_get_staking_addresses`
+		local wallets=`jq -r "to_entries[]" <<< "$wallet_info" | tr -d '[:space:]' | sed 's%}{%} {%g'`
+		printf_n
 		for wallet in $wallets; do
-			w_address=`jq -r ".key" <<< $wallet`
-			w_pubkey=`printf "$raw" | grep -B 1 "^Address: ${w_address}" | grep -oP "(?<=^Public key: )([^%]+)(?=$)"`
-			w_balance=`jq -r ".value.candidate_ledger_data.balance" <<< $wallet`
-			w_total_rolls=`jq -r ".value.candidate_rolls" <<< $wallet`
-			w_active_rolls=`jq -r ".value.active_rolls" <<< $wallet`
-			printf "$t_wi1" "$w_address"
-			if [ "$w_address" = "$address" ]; then
+			local address=`jq -r ".key" <<< "$wallet"`
+			printf "$t_wi1" "$address"
+			if [ "$address" = "$main_address" ]; then
 				printf_n "$t_wi2"
 			else
-				printf "\n"
+				printf_n
 			fi
-			printf_n "$t_wi3" "$w_pubkey"
-			if grep -q "$w_address" <<< "$staking_addresses"; then
-				printf_n "$t_wi4"
-			else
+			if [ "$private_keys" = "true" ]; then
+				local private_key=`jq -r ".value.private_key" <<< "$wallet"`
+				printf_n "$t_wi3" "$private_key"
+			fi
+			local public_key=`jq -r ".value.public_key" <<< "$wallet"`
+			printf_n "$t_wi4" "$public_key"
+			if grep -q "$address" <<< "$staking_addresses"; then
 				printf_n "$t_wi5"
+			else
+				printf_n "$t_wi6"
 			fi
-			printf_n "$t_wi6" "$w_balance"
-			printf_n "$t_wi7" "$w_total_rolls"
-			printf_n "$t_wi8" "$w_active_rolls"
+			local balance=`jq -r ".value.address_info.balance.candidate_ledger_info.balance" <<< "$wallet"`
+			printf_n "$t_wi7" "$balance"
+			local total_rolls=`jq -r ".value.address_info.rolls.candidate_rolls" <<< "$wallet"`
+			printf_n "$t_wi8" "$total_rolls"
+			local active_rolls=`jq -r ".value.address_info.rolls.active_rolls" <<< "$wallet"`
+			printf_n "$t_wi9" "$active_rolls"
+			printf_n
 		done
 	fi
-elif [ "$action" = "buy_rolls" ]; then
-	balance_float=`jq -r "[.balances[]] | .[0].candidate_ledger_data.balance" <<< $wallet_info`
-	roll_count=`printf "%d" $(bc -l <<< "$balance_float/100") 2>/dev/null`
-	if [ "$max_buy" = "true" ]; then
-		if [ "$roll_count" -eq "0" ]; then
-			printf_n "$t_br1"
+}
+buy_rolls() {
+	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
+	local balance=`jq -r "[.[]] | .[-1].address_info.balance.candidate_ledger_info.balance" <<< "$wallet_info"`
+	local roll_count=`printf "%d" $(bc -l <<< "$balance/100") 2>/dev/null`
+	if [ "$roll_count" -eq "0" ]; then
+		printf_n "$t_br1"
+	elif [ "$max_buy" = "true" ]; then
+		local resp=`./massa-client buy_rolls "$main_address" "$roll_count" 0`
+		if grep -q 'insuffisant balance' <<< "$resp"; then
+			printf_n "$t_br4"
+			return 1 2>/dev/null; exit 1
 		else
-			./massa-client buy_rolls "$address" "$roll_count" 0
 			printf_n "$t_br2" "$roll_count"
 		fi
 	else
-		printf "$t_br3"
+		printf "$t_br3" "$roll_count"
+		local rolls_for_buy
 		read -r rolls_for_buy
-		resp=`./massa-client buy_rolls $address $rolls_for_buy 0`
-		if grep -q 'not enough coins' <<< "$resp"; then
-			printf_n "$t_br4" "$roll_count"
+		if [ "$rolls_for_buy" -gt "$roll_count" ]; then
+			local resp=`./massa-client buy_rolls "$main_address" "$roll_count" 0`
+		else
+			local resp=`./massa-client buy_rolls "$main_address" "$rolls_for_buy" 0`
+		fi
+		if grep -q 'insuffisant balance' <<< "$resp"; then
+			printf_n "$t_br4"
 			return 1 2>/dev/null; exit 1
 		else
 			printf_n "$t_done"
 		fi
 	fi
-elif [ "$action" = "peers" ]; then
-	./massa-client --cli false peers
-elif [ "$action" = "version" ]; then
-	printf_n "$t_v" `./massa-client --cli true version | jq -r`
-elif [ "$action" = "next_draws" ]; then
-	draws_count=`./massa-client --cli true next_draws $address | jq length`
-	if [ "$draws_count" -gt "0" ]; then
-		printf_n "$t_nd1" "$draws_count"
+}
+node_add_staking_private_keys() {
+	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local private_key=`jq -r "[.[]] | .[0].private_key" <<< "$wallet_info"`
+	local resp=`./massa-client node_add_staking_private_keys "$private_key"`
+	if grep -q "error" <<< "$resp"; then
+		printf_n "$t_rpk"
 	else
-		printf_n "$t_nd2"
+		printf_n "$t_done"
 	fi
-elif [ "$action" = "register_staking_keys" ]; then
-	./massa-client register_staking_keys $(./massa-client --cli true wallet_info | jq -r ".wallet" | jq -r ".[-1][1][1]")
-	printf_n "$t_done"
-elif [ "$action" = "cmd_testnet_rewards_program" ]; then
+}
+node_testnet_rewards_program_ownership_proof() {
+	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
+	local discord_id
 	printf "$t_ctrp1"
 	read -r discord_id
-	resp=`./massa-client --cli true cmd_testnet_rewards_program $address $discord_id | grep -oPm1 "(?<=: )([^%]+)(?=$)"`
+	local resp=`./massa-client -j node_testnet_rewards_program_ownership_proof "$main_address" "$discord_id" | jq -r`
 	printf_n "$t_ctrp2" "$resp"
-else
-	resp=`./massa-client --cli "$raw_output" "$action" "$@" 2>&1`
+}
+other() {
+	if [ "$raw_output" = "true" ]; then
+		local resp=`./massa-client -j "$action" "$@" 2>&1`
+	else
+		local resp=`./massa-client "$action" "$@" 2>&1`
+	fi
 	if grep -q 'error: Found argument' <<< "$resp"; then
 		printf_n "$t_err"
 		return 1 2>/dev/null; exit 1
 	else
 		printf_n "$resp"
 	fi
-fi
+}
+
+# Actions
+sudo apt install jq bc -y &>/dev/null
+cd $HOME/massa/massa-client/
+if grep -q "$action" <<< "node_info wallet_info buy_rolls node_add_staking_private_keys node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
 cd
