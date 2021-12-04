@@ -305,5 +305,5 @@ other() {
 # Actions
 sudo apt install jq bc -y &>/dev/null
 cd $HOME/massa/massa-client/
-if grep -q "$action" <<< "node_info wallet_info buy_rolls node_add_staking_private_keys node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
+if grep -q "$action" <<< "client node_info wallet_info buy_rolls node_add_staking_private_keys node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
 cd
