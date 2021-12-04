@@ -130,6 +130,7 @@ install() {
 		if [ `wc -c < "$HOME/massa.zip"` -ge 1000 ]; then
 			unzip $HOME/massa.zip -d $HOME/massa/
 			rm -rf $HOME/massa.zip
+			chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 			printf "[Unit]
 Description=Massa Node
 After=network-online.target
