@@ -89,15 +89,26 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		open_ports
 		cd $HOME/massa/massa-client/
 		sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat
-		#local wallet_address="null"
-		#while [ "$wallet_address" = "null" ]; do
-		#	local wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
-		#	continue
-		#done
-		#. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
+		local wallet_address="null"
+		while [ "$wallet_address" = "null" ]; do
+			local wallet_address=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq -r "[.[]] | .[0].address_info.address"`
+		done
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_wallet_address -v "$wallet_address"
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 		cd
-		printf_n "${C_LGn}Done!${RES}\n"
+		printf_n "
+The node was ${C_LGn}updated${RES}.
+
+\tv ${C_LGn}Useful commands${RES} v
+
+To run a client: ${C_LGn}massa_client${RES}
+To view the node status: ${C_LGn}sudo systemctl status massad${RES}
+To view the node log: ${C_LGn}massa_log${RES}
+To restart the node: ${C_LGn}sudo systemctl restart massad${RES}
+
+CLI client commands (use ${C_LGn}massa_cli_client -h${RES} to view the help page):
+${C_LGn}`compgen -a | grep massa_ | sed "/massa_log/d"`${RES}
+"
 	else
 		printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
 	fi
@@ -143,11 +154,11 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 				sudo systemctl restart massad
 				sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat	
 			fi
-			#local wallet_address="null"
-			#while [ "$wallet_address" = "null" ]; do
-			#	local wallet_address=$(./massa-client --cli true wallet_info | jq -r ".balances | keys[-1]")
-			#done
-			#. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n "massa_wallet_address" -v "$wallet_address"
+			local wallet_address="null"
+			while [ "$wallet_address" = "null" ]; do
+				local wallet_address=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq -r "[.[]] | .[0].address_info.address"`
+			done
+			. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_wallet_address -v "$wallet_address"
 			. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 			if [ ! -d $HOME/massa_backup ]; then
 				mkdir $HOME/massa_backup
@@ -165,10 +176,13 @@ ${C_LR}$HOME/massa_backup/${RES}
 
 \tv ${C_LGn}Useful commands${RES} v
 
-To start a client: ${C_LGn}massa_client${RES}
+To run a client: ${C_LGn}massa_client${RES}
 To view the node status: ${C_LGn}sudo systemctl status massad${RES}
 To view the node log: ${C_LGn}massa_log${RES}
 To restart the node: ${C_LGn}sudo systemctl restart massad${RES}
+
+CLI client commands (use ${C_LGn}massa_cli_client -h${RES} to view the help page):
+${C_LGn}`compgen -a | grep massa_ | sed "/massa_log/d"`${RES}
 "
 		else
 			rm -rf massa.zip
@@ -213,8 +227,12 @@ ${C_LGn}Client installation...${RES}
 "
 		cd $HOME/massa/massa-client/
 		cargo run --release wallet_new_privkey
-		#massa_wallet_address=$(cargo run --release -- --cli true wallet_info | jq -r ".balances | keys[]")
-		#. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_log -v "sudo journalctl -f -n 100 -u massad" -a
+		local wallet_address="null"
+		while [ "$wallet_address" = "null" ]; do
+			local wallet_address=`sed -n 2p <<< $(cargo run --release -j wallet_info) | jq -r "[.[]] | .[0].address_info.address"`
+		done
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_wallet_address -v "$wallet_address"
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_log -v "sudo journalctl -f -n 100 -u massad" -a
 	fi
 	printf_n "${C_LGn}Done!${RES}"
 	cd
@@ -227,10 +245,13 @@ ${C_LR}$HOME/massa_backup/${RES}
 
 \tv ${C_LGn}Useful commands${RES} v
 
-To start a client: ${C_LGn}massa_client${RES}
+To run a client: ${C_LGn}massa_client${RES}
 To view the node status: ${C_LGn}sudo systemctl status massad${RES}
 To view the node log: ${C_LGn}massa_log${RES}
 To restart the node: ${C_LGn}sudo systemctl restart massad${RES}
+
+CLI client commands (use ${C_LGn}massa_cli_client -h${RES} to view the help page):
+${C_LGn}`compgen -a | grep massa_ | sed "/massa_log/d"`${RES}
 "
 }
 
