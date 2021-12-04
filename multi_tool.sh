@@ -96,6 +96,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_wallet_address -v "$wallet_address"
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 		cd
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 		printf_n "
 The node was ${C_LGn}updated${RES}.
 
