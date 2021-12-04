@@ -84,6 +84,7 @@ if [ "$language" = "RU" ]; then
 	t_ni3="Текущий цикл:           ${C_LGn}%d${RES}"
 	t_ni4="Запланировано слотов:   ${C_LGn}%d${RES}"
 	t_ni5="Запланировано слотов:   ${C_R}0${RES} (попробуйте позже ${C_LGn}ещё раз${RES})"
+	
 	t_ni6="Порты открыты:          ${C_LGn}да${RES}"
 	t_ni7="Порты открыты:          ${C_R}нет${RES}"
 	t_ni8="Входящих подключений:   ${C_LGn}%d${RES}"
@@ -175,16 +176,16 @@ node_info() {
 		printf_n "$t_ni1" "$node_id"
 		local node_version=`jq -r ".version" <<< "$node_info"`
 		printf_n "$t_ni2" "$node_version"
+		
 		local current_cycle=`jq -r ".current_cycle" <<< "$node_info"`
 		printf_n "$t_ni3" "$current_cycle"
-		
 		local draws_count=`./massa-client -j get_addresses "$main_address" | jq -r ".[0].block_draws | length"`
 		if [ "$draws_count" -gt 0 ]; then
 			printf_n "$t_ni4" "$draws_count"
 		else
 			printf_n "$t_ni5"
 		fi
-		
+		print_n
 		local incoming_connections=`jq -r ".network_stats.in_connection_count" <<< "$node_info"`
 		if [ "$incoming_connections" -gt 0 ]; then
 			printf_n "$t_ni6"
