@@ -57,8 +57,8 @@ EOF
 }
 update() {
 	printf_n "${C_LGn}Node updating...${RES}"
-	if [ ! -d $HOME/massa_backup ]; then
-		mkdir $HOME/massa_backup
+	if [ ! -f $HOME/massa/massa-client/wallet.dat ] || [ ! -f $HOME/massa/massa-client/node_privkey.key ]; then
+		mkdir -p $HOME/massa_backup
 		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
