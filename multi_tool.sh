@@ -150,7 +150,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/massad.service
 			open_ports
 			cd $HOME/massa/massa-client/
 			if [ ! -d $HOME/massa_backup ]; then
-				./massa-client wallet_new_privkey
+				./massa-client wallet_generate_private_key
 			else
 				sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
 				sudo systemctl restart massad
