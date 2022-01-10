@@ -201,7 +201,7 @@ node_info() {
 	fi
 }
 wallet_info() {
-	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local wallet_info=`./massa-client -j wallet_info`
 	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
 	if [ "$raw_output" = "true" ]; then
 		printf_n "`jq -r "[.[]]" <<< "$wallet_info"`"
