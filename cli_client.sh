@@ -166,7 +166,7 @@ fi
 printf_n(){ printf "$1\n" "${@:2}"; }
 client() { ./massa-client; }
 node_info() {
-	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local wallet_info=`./massa-client -j wallet_info`
 	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
 	local node_info=`./massa-client -j get_status | jq`
 	if [ "$raw_output" = "true" ]; then
@@ -239,7 +239,7 @@ wallet_info() {
 	fi
 }
 buy_rolls() {
-	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local wallet_info=`./massa-client -j wallet_info`
 	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
 	local balance=`jq -r "[.[]] | .[-1].address_info.balance.candidate_ledger_info.balance" <<< "$wallet_info"`
 	local roll_count=`printf "%d" $(bc -l <<< "$balance/100") 2>/dev/null`
@@ -271,7 +271,7 @@ buy_rolls() {
 	fi
 }
 node_add_staking_private_keys() {
-	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local wallet_info=`./massa-client -j wallet_info`
 	local private_key=`jq -r "[.[]] | .[0].private_key" <<< "$wallet_info"`
 	local resp=`./massa-client node_add_staking_private_keys "$private_key"`
 	if grep -q "error" <<< "$resp"; then
@@ -281,7 +281,7 @@ node_add_staking_private_keys() {
 	fi
 }
 node_testnet_rewards_program_ownership_proof() {
-	local wallet_info=`sed -n 2p <<< $(./massa-client -j wallet_info) | jq`
+	local wallet_info=`./massa-client -j wallet_info`
 	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
 	local discord_id
 	printf "$t_ctrp1"
