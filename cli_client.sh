@@ -181,8 +181,8 @@ node_info() {
 		
 		local current_cycle=`jq -r ".current_cycle" <<< "$node_info"`
 		printf_n "$t_ni3" "$current_cycle"
-		local draws_count=`./massa-client -j get_addresses "$main_address" | jq -r ".[0].block_draws | length"`
-		if [ "$draws_count" -gt 0 ]; then
+		local draws_count=`./massa-client -j get_addresses "$main_address" | jq -r ".[0].block_draws | length" 2>/dev/null`
+		if [ -n "$draws_count" ] && [ "$draws_count" -gt 0 ]; then
 			printf_n "$t_ni4" "$draws_count"
 		else
 			printf_n "$t_ni5"
