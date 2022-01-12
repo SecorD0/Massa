@@ -118,6 +118,7 @@ if [ "$language" = "RU" ]; then
 	
 	t_done="${C_LGn}Готово!${RES}"
 	t_err="${C_R}Нет такого действия!${RES}"
+	t_err_nwn="\n${C_R}Нода не работает!${RES}\nПосмотреть лог: ${C_LGn}massa_log${RES}\n"
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
 #elif [ "$language" = ".." ]; then
 else
@@ -160,6 +161,7 @@ else
 	
 	t_done="${C_LGn}Done!${RES}"
 	t_err="${C_R}There is no such action!${RES}"
+	t_err_nwn="\n${C_R}Node isn't working!${RES}\nView the log: ${C_LGn}massa_log${RES}\n"
 fi
 
 # Functions
@@ -306,5 +308,9 @@ other() {
 # Actions
 sudo apt install jq bc -y &>/dev/null
 cd $HOME/massa/massa-client/
-if grep -q "$action" <<< "client node_info wallet_info buy_rolls node_add_staking_private_keys node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
+if grep -q "check if your node is running" <<< `./massa-client get_status`; then
+	printf_n "$t_err_nwn"
+else
+	if grep -q "$action" <<< "client node_info wallet_info buy_rolls node_add_staking_private_keys node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
+fi
 cd
