@@ -82,8 +82,8 @@ if [ "$language" = "RU" ]; then
 	t_ni2="Версия ноды:            ${C_LGn}%s${RES}\n"
 	
 	t_ni3="Текущий цикл:           ${C_LGn}%d${RES}"
-	t_ni4="Запланировано слотов:   ${C_LGn}%d${RES}"
-	t_ni5="Запланировано слотов:   ${C_R}0${RES} (попробуйте позже ${C_LGn}ещё раз${RES})"
+	#t_ni4="Запланировано слотов:   ${C_LGn}%d${RES}"
+	#t_ni5="Запланировано слотов:   ${C_R}0${RES} (попробуйте позже ${C_LGn}ещё раз${RES})"
 	
 	t_ni6="Порты открыты:          ${C_LGn}да${RES}"
 	t_ni7="Порты открыты:          ${C_R}нет${RES}"
@@ -126,8 +126,9 @@ else
 	t_ni2="Node version:           ${C_LGn}%s${RES}\n"
 	
 	t_ni3="Currnet cycle:          ${C_LGn}%d${RES}"
-	t_ni4="Draws scheduled:        ${C_LGn}%d${RES}"
-	t_ni5="Draws scheduled:        ${C_R}0${RES} (try ${C_LGn}again later${RES})"
+	#t_ni4="Draws scheduled:        ${C_LGn}%d${RES}"
+	#t_ni5="Draws scheduled:        ${C_R}0${RES} (try ${C_LGn}again later${RES})"
+	
 	t_ni6="Ports opened:           ${C_LGn}yes${RES}"
 	t_ni7="Ports opened:           ${C_R}no${RES}"
 	t_ni8="Incoming connections:   ${C_LGn}%d${RES}"
@@ -181,12 +182,12 @@ node_info() {
 		
 		local current_cycle=`jq -r ".current_cycle" <<< "$node_info"`
 		printf_n "$t_ni3" "$current_cycle"
-		local draws_count=`./massa-client -j get_addresses "$main_address" | jq -r ".[0].block_draws | length" 2>/dev/null`
-		if [ -n "$draws_count" ] && [ "$draws_count" -gt 0 ]; then
-			printf_n "$t_ni4" "$draws_count"
-		else
-			printf_n "$t_ni5"
-		fi
+		#local draws_count=`./massa-client -j get_addresses "$main_address" | jq -r ".[0].block_draws | length" 2>/dev/null`
+		#if [ -n "$draws_count" ] && [ "$draws_count" -gt 0 ]; then
+		#	printf_n "$t_ni4" "$draws_count"
+		#else
+		#	printf_n "$t_ni5"
+		#fi
 		printf_n
 		local opened_ports=`ss -tulpn | grep :3303`
 		if [ -n "$opened_ports" ]; then
