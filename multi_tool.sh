@@ -63,11 +63,10 @@ update() {
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
 	local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
-	wget -qO $HOME/massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
-	if [ `wc -c < "$HOME/massa.zip"` -ge 1000 ]; then
+	wget -qO $HOME/massa.tar.gz "https://github.com/massalabs/massa/releases/download/${massa_version}/massa_${massa_version}_release_linux.tar.gz"
+	if [ `wc -c < "$HOME/massa.tar.gz"` -ge 1000 ]; then
 		rm -rf $HOME/massa/
-		unzip $HOME/massa.zip -d $HOME/massa/
-		rm -rf $HOME/massa.zip
+		tar -xvf $HOME/massa.tar.gz
 		chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 		printf "[Unit]
 Description=Massa Node
@@ -108,7 +107,7 @@ ${C_LGn}`compgen -a | grep massa_ | sed "/massa_log/d"`${RES}
 	else
 		printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
 	fi
-	rm -rf massa.zip
+	rm -rf $HOME/massa.tar.gz
 }
 install() {
 	if [ -d $HOME/massa/ ]; then
@@ -116,15 +115,15 @@ install() {
 	else
 		sudo apt update
 		sudo apt upgrade -y
-		sudo apt install unzip jq curl pkg-config git build-essential libssl-dev -y
+		sudo apt install jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
 		mkdir -p $HOME/massa/
 		cd $HOME/massa/
 		local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
-		wget -qO $HOME/massa.zip "https://github.com/massalabs/massa/releases/download/${massa_version}/release_linux.zip"
-		if [ `wc -c < "$HOME/massa.zip"` -ge 1000 ]; then
-			unzip $HOME/massa.zip -d $HOME/massa/
-			rm -rf $HOME/massa.zip
+		wget -qO $HOME/massa.tar.gz "https://github.com/massalabs/massa/releases/download/${massa_version}/massa_${massa_version}_release_linux.tar.gz"
+		if [ `wc -c < "$HOME/massa.tar.gz"` -ge 1000 ]; then
+			tar -xvf $HOME/massa.tar.gz
+			rm -rf $HOME/massa.tar.gz
 			chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 			printf "[Unit]
 Description=Massa Node
@@ -177,7 +176,7 @@ CLI client commands (use ${C_LGn}massa_cli_client -h${RES} to view the help page
 ${C_LGn}`compgen -a | grep massa_ | sed "/massa_log/d"`${RES}
 "
 		else
-			rm -rf massa.zip
+			rm -rf $HOME/massa.tar.gz
 			printf_n "${C_LR}Archive with binary downloaded unsuccessfully!${RES}\n"
 		fi
 	fi
@@ -188,7 +187,7 @@ install_source() {
 	else
 		sudo apt update
 		sudo apt upgrade -y
-		sudo apt install unzip jq curl pkg-config git build-essential libssl-dev -y
+		sudo apt install jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/installers/rust.sh) -n
 		if [ ! -d $HOME/massa/ ]; then
