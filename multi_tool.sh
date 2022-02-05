@@ -117,8 +117,6 @@ install() {
 		sudo apt upgrade -y
 		sudo apt install jq curl pkg-config git build-essential libssl-dev -y
 		printf_n "${C_LGn}Node installation...${RES}"
-		mkdir -p $HOME/massa/
-		cd $HOME/massa/
 		local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
 		wget -qO $HOME/massa.tar.gz "https://github.com/massalabs/massa/releases/download/${massa_version}/massa_${massa_version}_release_linux.tar.gz"
 		if [ `wc -c < "$HOME/massa.tar.gz"` -ge 1000 ]; then
