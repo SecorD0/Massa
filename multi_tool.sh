@@ -36,6 +36,10 @@ while test $# -gt 0; do
 		function="install_source"
 		shift
 		;;
+	-un|--uninstall)
+		function="uninstall"
+		shift
+		;;
 	*|--)
 		break
 		;;
@@ -238,7 +242,21 @@ CLI client commands (use ${C_LGn}massa_cli_client -h${RES} to view the help page
 ${C_LGn}`compgen -a | grep massa_ | sed "/massa_log/d"`${RES}
 "
 }
-
+uninstall() {
+	sudo systemctl stop massad
+	if [ ! -d $HOME/massa_backup ]; then
+		mkdir $HOME/massa_backup
+		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
+	fi
+	if [ -f $HOME/massa_backup/wallet.dat ] && [ -f $HOME/massa_backup/node_privkey.key ]; then
+		rm -rf $HOME/massa/ /etc/systemd/system/massad.service
+		sudo systemctl daemon-reload
+		printf_n "${C_LGn}Done!${RES}"
+	else
+		printf_n "${C_LR}No backup of the necessary files was found, delete the node manually!${RES}"
+	fi	
+}
 
 # Actions
 sudo apt install wget -y &>/dev/null
