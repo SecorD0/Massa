@@ -250,7 +250,7 @@ uninstall() {
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
 	if [ -f $HOME/massa_backup/wallet.dat ] && [ -f $HOME/massa_backup/node_privkey.key ]; then
-		rm -rf $HOME/massa/ /etc/systemd/system/massad.service
+		rm -rf $HOME/massa/ /etc/systemd/system/massa.service /etc/systemd/system/massad.service
 		sudo systemctl daemon-reload
 		printf_n "${C_LGn}Done!${RES}"
 	else
