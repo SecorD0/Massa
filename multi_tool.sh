@@ -16,9 +16,10 @@ while test $# -gt 0; do
 		echo -e "${C_LGn}Usage${RES}: script ${C_LGn}[OPTIONS]${RES}"
 		echo
 		echo -e "${C_LGn}Options${RES}:"
-		echo -e "  -h, --help         show the help page"
+		echo -e "  -h,  --help        show the help page"
 		echo -e "  -op, --open-ports  open required ports"
-		echo -e "  -s, --source       install the node using a source code"
+		echo -e "  -s,  --source      install the node using a source code"
+		echo -e "  -un, --uninstall   unistall the node"
 		echo
 		echo -e "You can use either \"=\" or \" \" as an option and value ${C_LGn}delimiter${RES}"
 		echo
