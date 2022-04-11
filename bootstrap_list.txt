@@ -1,4 +1,4 @@
-    bootstrap_list = [
+["188.120.255.115", "5Xc7xx6r23G7kAegZFR4khjdgt9gTpp4ntVGj6t7zmuuCM6qXH"]    bootstrap_list = [
 	["150.158.145.4:31245", "89Z44JNLYZhsYS3GRThVmeFheJjrjqTkcWeDswWVQ97XTU7ipm"],
 	["150.158.147.162:31245", "7ze1dt5vvMNafbPKMxdzT75ikDJNmM2BQe7j787Zg4UjYws6zb"],
 	["95.216.2.219:31245", "6upC7o9iepMNstb7snuL2ZSeHqqoBTMSyxST1s9ZJM3KkmPxeQ"],
