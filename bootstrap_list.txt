@@ -1,4 +1,6 @@
 bootstrap_list = [
+	["2a03:cfc0:8000:25::9213:18a6", "6fp2AfEgt6YgUQmZM5vjZXy7t6hwojoeYNAuJXThA4Z3jVZBuw"],
+	["146.19.24.166", "6fp2AfEgt6YgUQmZM5vjZXy7t6hwojoeYNAuJXThA4Z3jVZBuw"],
 	["149.202.86.103:31245", "5GcSNukkKePWpNSjx9STyoEZniJAN4U4EUzdsQyqhuP3WYf6nj"],
 	["149.202.89.125:31245", "5wDwi2GYPniGLzpDfKjXJrmHV3p1rLRmm4bQ9TUWNVkpYmd4Zm"],
 	["158.69.120.215:31245", "5QbsTjSoKzYc8uBbwPCap392CoMQfZ2jviyq492LZPpijctb9c"],
