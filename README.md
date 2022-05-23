@@ -1,3 +1,3 @@
 # Massa
 
-Official repository: https://github.com/massalabs/massa
+[Official repository](https://github.com/massalabs/massa)
