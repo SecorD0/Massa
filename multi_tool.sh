@@ -285,12 +285,13 @@ ${bootstrap_list}
 	local third_part=`sed "1,${end}d" "$config_path"`
 	echo "${first_part}${second_part}${third_part}" > "$config_path"
 	sed -i -e "s%retry_delay *=.*%retry_delay = 10000%; " "$config_path"
-	sudo systemctl restart massad
-	printf_n "
-${C_LGn}Done!${RES}
-
+	printf_n "${C_LGn}Done!${RES}"
+	if sudo systemctl status massad 2>&1 | grep -q running; then
+		sudo systemctl restart massad
+		printf_n "
 You can view the node bootstrapping via ${C_LGn}massa_log${RES} command
 "
+	fi	
 }
 
 # Actions
