@@ -176,7 +176,7 @@ EOF
 			open_ports
 			cd $HOME/massa/massa-client/
 			if [ ! -d $HOME/massa_backup ]; then
-				./massa-client -p "$massa_password" wallet_generate_secret_key
+				./massa-client -p "$massa_password" wallet_generate_secret_key &>/dev/null
 				mkdir -p $HOME/massa_backup
 				sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 				while true; do
