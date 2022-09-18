@@ -1,7 +1,7 @@
 FROM ubuntu
 
-LABEL creator="SecorD | Let's Node"
-LABEL url="https://t.me/letskynode — node Community"
+LABEL creator="SecorD >> 1package"
+LABEL url="📦 All in https://t.me/OnePackage"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
