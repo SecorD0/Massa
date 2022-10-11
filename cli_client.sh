@@ -237,7 +237,7 @@ wallet_info() {
 			else
 				printf_n "$t_wi6"
 			fi
-			local balance=`jq -r ".value.address_info.candidate_sequential_balance" <<< "$wallet"`
+			local balance=`jq -r ".value.address_info.candidate_balance" <<< "$wallet"`
 			printf_n "$t_wi7" "$balance"
 			local total_rolls=`jq -r ".value.address_info.candidate_rolls" <<< "$wallet"`
 			printf_n "$t_wi8" "$total_rolls"
@@ -250,7 +250,7 @@ wallet_info() {
 buy_rolls() {
 	local wallet_info=`./massa-client -p "$massa_password" -j wallet_info`
 	local main_address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
-	local balance=`jq -r "[.[]] | .[-1].address_info.candidate_sequential_balance" <<< "$wallet_info"`
+	local balance=`jq -r "[.[]] | .[-1].address_info.candidate_balance" <<< "$wallet_info"`
 	local roll_count=`printf "%d" $(bc -l <<< "$balance/100") 2>/dev/null`
 	if [ "$roll_count" -eq "0" ]; then
 		printf_n "$t_br1"
