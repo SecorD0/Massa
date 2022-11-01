@@ -303,7 +303,7 @@ replace_bootstraps() {
 	local bootstrap_list=`wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/bootstrap_list.txt | shuf -n42 | awk '{ print "        "$0"," }'`
 	local len=`wc -l < "$config_path"`
 	local start=`grep -n bootstrap_list "$config_path" | cut -d: -f1`
-	local end=`grep -n "\[optionnal\] port on which to listen" "$config_path" | cut -d: -f1`
+	local end=`grep -n "Path to the bootstrap whitelist file. This whitelist define IPs that can bootstrap on your node." "$config_path" | cut -d: -f1`
 	local end=$((end-1))
 	local first_part=`sed "${start},${len}d" "$config_path"`
 	local second_part=`cat <<EOF
@@ -321,7 +321,7 @@ ${bootstrap_list}
 EOF`
 	local third_part=`sed "1,${end}d" "$config_path"`
 	echo -e "${first_part}\n${second_part}\n${third_part}" > "$config_path"
-	sed -i -e "s%retry_delay *=.*%retry_delay = 10000%; " "$config_path"
+	sed -i.bak -e "s%retry_delay *=.*%retry_delay = 10000%; " "$config_path"
 	printf_n "${C_LGn}Done!${RES}"
 	if sudo systemctl status massad 2>&1 | grep -q running; then
 		sudo systemctl restart massad
