@@ -122,6 +122,53 @@ if [ "$language" = "RU" ]; then
 	t_err_mp2="\n${C_R}Не существует переменной massa_password с паролем!${RES}\n"
 	t_err_wp="\n${C_R}Неверный пароль!${RES}\n"
 	t_err_nwn="\n${C_R}Нода не работает!${RES}\nПосмотреть лог: ${C_LGn}massa_log${RES}\n"
+
+# Texts
+elif [ "$language" = "UA" ]; then
+	t_ni1="\nID ноди:                ${C_LGn}%s${RES}"
+	t_ni2="Версія ноди:            ${C_LGn}%s${RES}\n"
+	
+	t_ni3="Поточний цикл:           ${C_LGn}%d${RES}"
+	#t_ni4="Заплановано слотів:   ${C_LGn}%d${RES}"
+	#t_ni5="Заплановано слотів:   ${C_R}0${RES} (спробуйте пізніше ${C_LGn}ще раз${RES})"
+	
+	t_ni6="Порти відкриті:          ${C_LGn}так${RES}"
+	t_ni7="Порти відкриті:          ${C_R}ні${RES}"
+	t_ni8="Вхідних підключень:   ${C_LGn}%d${RES}"
+	t_ni9="Вихідних підключень:  ${C_LGn}%d${RES}\n\n"
+	t_ni10="   Гаманці"
+	
+	
+	t_wi1="Адреса гаманця:   ${C_LGn}%s${RES}"
+	t_wi2=" (${C_LGn}основний${RES})"
+	t_wi3="Приватний ключ:   ${C_LGn}%s${RES} (${C_R}нікому не показувати${RES})"
+	t_wi4="Публічний ключ:   ${C_LGn}%s${RES}"
+	t_wi5="Зареєстрований\пдля стейкінгу:    ${C_LGn}так${RES}"
+	t_wi6="Зареєстрований\пдля стейкінгу:    ${C_R}ні${RES}"
+	t_wi7="Баланс:           ${C_LGn}%.2f${RES}"
+	t_wi8="Загалом ROLL'ів:    ${C_LGn}%d${RES}"
+	t_wi9="Активних ROLL'ів: ${C_LGn}%d${RES}"
+	
+	
+	t_br1="${C_R}Баланс менш ніж 100 токенів${RES}"
+	t_br2="Куплено ROLL'ів: ${C_LGn}%d${RES}"
+	t_br3="Введіть кількість ROLL'ів (максимально ${C_LGn}%d${RES}): "
+	t_br4="${C_R}Недостатньо токенів для придбання${RES}"
+	
+	
+	t_rpk="${C_R}Не вдалося зареєструвати ключ для стейкінгу${RES}"
+	
+	
+	t_ctrp1="${C_LGn}Введіть Discord ID:${RES} "
+	t_ctrp2="\nНадішліть Discord боту наступне:\n${C_LGn}%s${RES}\n"
+	
+	
+	t_done="${C_LGn}Готово!${RES}"
+	t_err="${C_R}Немає такої дії!${RES}"
+	t_err_mp1="\n${C_R}Не існує змінної massa_password з паролем, введіть його для збереження у змінній!${RES}"
+	t_err_mp2="\n${C_R}Не існує змінної massa_password з паролем!${RES}\n"
+	t_err_wp="\n${C_R}Невірний пароль!${RES}\n"
+	t_err_nwn="\n${C_R}Нода не працює!${RES}\nПодивитися лог: ${C_LGn}massa_log${RES}\n"
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
 #elif [ "$language" = ".." ]; then
 else
