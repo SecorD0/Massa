@@ -123,7 +123,6 @@ if [ "$language" = "RU" ]; then
 	t_err_wp="\n${C_R}Неверный пароль!${RES}\n"
 	t_err_nwn="\n${C_R}Нода не работает!${RES}\nПосмотреть лог: ${C_LGn}massa_log${RES}\n"
 
-# Texts
 elif [ "$language" = "UA" ]; then
 	t_ni1="\nID ноди:                ${C_LGn}%s${RES}"
 	t_ni2="Версія ноди:            ${C_LGn}%s${RES}\n"
@@ -169,6 +168,7 @@ elif [ "$language" = "UA" ]; then
 	t_err_mp2="\n${C_R}Не існує змінної massa_password з паролем!${RES}\n"
 	t_err_wp="\n${C_R}Невірний пароль!${RES}\n"
 	t_err_nwn="\n${C_R}Нода не працює!${RES}\nПодивитися лог: ${C_LGn}massa_log${RES}\n"
+	
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Massa/blob/main/cli_client.sh
 #elif [ "$language" = ".." ]; then
 else
