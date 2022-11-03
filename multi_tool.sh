@@ -28,7 +28,7 @@ while test $# -gt 0; do
 		echo -e "https://github.com/SecorD0/Massa/blob/main/multi_tool.sh - script URL"
 		echo -e "https://t.me/OnePackage — noderun and tech community"
 		echo
-		return 0
+		return 0 2>/dev/null; exit 0
 		;;
 	-op|--open-ports)
 		function="open_ports"
@@ -299,6 +299,9 @@ uninstall() {
 	fi	
 }
 replace_bootstraps() {
+	printf_n "This function deprecated!"
+	return 0 2>/dev/null; exit 0
+	
 	local config_path="$HOME/massa/massa-node/base_config/config.toml"
 	local bootstrap_list=`wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/bootstrap_list.txt | shuf -n42 | awk '{ print "        "$0"," }'`
 	local len=`wc -l < "$config_path"`
