@@ -81,7 +81,11 @@ update() {
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
 	if grep -q "wrong password" <<< `cd $HOME/massa/massa-client/; ./massa-client -p "$massa_password" 2>&1; cd`; then
-		printf_n "\n${C_R}Wrong password!${RES}\n"
+		printf_n "
+${C_R}Wrong password!${RES}
+Enter the correct one with the following command and run the script again.
+${C_LGn}. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_password${RES}
+"
 		return 1 2>/dev/null; exit 1
 	fi
 	local massa_version=`wget -qO- https://api.github.com/repos/massalabs/massa/releases/latest | jq -r ".tag_name"`
