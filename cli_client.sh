@@ -37,7 +37,7 @@ while test $# -gt 0; do
 		echo -e "  ${C_C}node_info${RES}                      shows processed node and wallet info or raw node info"
 		echo -e "  ${C_C}wallet_info${RES}                    shows processed/raw wallet info"
 		echo -e "  ${C_C}buy_rolls${RES}                      buys a specified number of ROLLs or for the whole balance"
-		echo -e "  ${C_C}node_add_staking_secret_keys${RES}   registers the secret key created first"
+		echo -e "  ${C_C}node_start_staking${RES}   registers the secret key created first"
 		echo -e "  ${C_C}node_testnet_rewards_program_ownership_proof${RES}  after entering the Discord ID it gives you"
 		echo -e "                                                 a hash for registering in the Discord bot"
 		echo
@@ -326,10 +326,10 @@ buy_rolls() {
 		fi
 	fi
 }
-node_add_staking_secret_keys() {
+node_start_staking() {
 	local wallet_info=`./massa-client -p "$massa_password" -j wallet_info`
-	local secret_key=`jq -r "[.[]] | .[0].keypair.secret_key" <<< "$wallet_info"`
-	local resp=`./massa-client -p "$massa_password" node_add_staking_secret_keys "$secret_key"`
+	local address=`jq -r "[.[]] | .[0].address_info.address" <<< "$wallet_info"`
+	local resp=`./massa-client -p "$massa_password" node_start_staking "$address"`
 	if grep -q "error" <<< "$resp"; then
 		printf_n "$t_rpk"
 	else
@@ -378,6 +378,6 @@ fi
 if grep -q "check if your node is running" <<< `./massa-client -p "$massa_password" get_status`; then
 	printf_n "$t_err_nwn"
 else
-	if grep -q "$action" <<< "client node_info wallet_info buy_rolls node_add_staking_secret_keys node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
+	if grep -q "$action" <<< "client node_info wallet_info buy_rolls node_start_staking node_testnet_rewards_program_ownership_proof"; then $action; else other "$@"; fi
 fi
 cd
