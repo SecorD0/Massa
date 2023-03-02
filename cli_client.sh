@@ -98,7 +98,7 @@ if [ "$language" = "RU" ]; then
 	t_wi4="Публичный ключ:   ${C_LGn}%s${RES}"
 	t_wi5="Зарегистрирован\nдля стейкинга:    ${C_LGn}да${RES}"
 	t_wi6="Зарегистрирован\nдля стейкинга:    ${C_R}нет${RES}"
-	t_wi7="Баланс:           ${C_LGn}%.2f${RES}"
+	t_wi7="Баланс:           ${C_LGn}%f${RES}"
 	t_wi8="Всего ROLL'ов:    ${C_LGn}%d${RES}"
 	t_wi9="Активных ROLL'ов: ${C_LGn}%d${RES}"
 	
@@ -144,7 +144,7 @@ elif [ "$language" = "UA" ]; then
 	t_wi4="Публічний ключ:    ${C_LGn}%s${RES}"
 	t_wi5="Зареєстрований\nдля стейкінгу:     ${C_LGn}так${RES}"
 	t_wi6="Зареєстрований\nдля стейкінгу:     ${C_R}ні${RES}"
-	t_wi7="Баланс:            ${C_LGn}%.2f${RES}"
+	t_wi7="Баланс:            ${C_LGn}%f${RES}"
 	t_wi8="Загалом ROLL'ів:   ${C_LGn}%d${RES}"
 	t_wi9="Активних ROLL'ів:  ${C_LGn}%d${RES}"
 	
@@ -192,7 +192,7 @@ else
 	t_wi4="Public key:      ${C_LGn}%s${RES}"
 	t_wi5="Registered\nfor staking:     ${C_LGn}yes${RES}"
 	t_wi6="Registered\nfor staking:     ${C_R}no${RES}"
-	t_wi7="Balance:         ${C_LGn}%.2f${RES}"
+	t_wi7="Balance:         ${C_LGn}%f${RES}"
 	t_wi8="Total ROLLs:     ${C_LGn}%d${RES}"
 	t_wi9="Active ROLLs:    ${C_LGn}%d${RES}"
 	
