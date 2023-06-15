@@ -19,7 +19,6 @@ while test $# -gt 0; do
 		echo -e "  -h,  --help        show the help page"
 		echo -e "  -op, --open-ports  open required ports"
 		echo -e "  -s,  --source      install the node using a source code"
-		echo -e "  -rb                replace bootstraps"
 		echo -e "  -un, --uninstall   unistall the node"
 		echo
 		echo -e "You can use either \"=\" or \" \" as an option and value ${C_LGn}delimiter${RES}"
@@ -36,10 +35,6 @@ while test $# -gt 0; do
 		;;
 	-s|--source)
 		function="install_source"
-		shift
-		;;
-	-rb)
-		function="replace_bootstraps"
 		shift
 		;;
 	-un|--uninstall)
@@ -158,7 +153,6 @@ install() {
 			rm -rf $HOME/massa.tar.gz
 			chmod +x $HOME/massa/massa-node/massa-node $HOME/massa/massa-client/massa-client
 			. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
-			replace_bootstraps
 			sudo tee <<EOF >/dev/null /etc/systemd/system/massad.service
 [Unit]
 Description=Massa Node
@@ -179,12 +173,13 @@ EOF
 			sudo systemctl daemon-reload
 			open_ports
 			cd $HOME/massa/massa-client/
+			printf_n "${C_LGn}Waiting for the node to start...${RES}"
 			if [ ! -d $HOME/massa_backup ]; then
-				./massa-client -p "$massa_password" wallet_generate_secret_key &>/dev/null
-				mkdir -p $HOME/massa_backup
-				sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 				while true; do
 					if [ -f $HOME/massa/massa-node/config/node_privkey.key ]; then
+						./massa-client -p "$massa_password" wallet_generate_secret_key
+						mkdir -p $HOME/massa_backup
+						sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
 						sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 						break
 					else
@@ -291,6 +286,7 @@ uninstall() {
 	if [ -f $HOME/massa_backup/wallet.dat ] && [ -f $HOME/massa_backup/node_privkey.key ]; then
 		rm -rf $HOME/massa/ /etc/systemd/system/massa.service /etc/systemd/system/massad.service
 		sudo systemctl daemon-reload
+		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_password -da
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_log -da
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_client -da
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_cli_client -da
