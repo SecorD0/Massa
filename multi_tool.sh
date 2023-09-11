@@ -69,8 +69,8 @@ update() {
 		return 1 2>/dev/null; exit 1
 	fi
 	mkdir -p $HOME/massa_backup
-	if [ ! -f $HOME/massa_backup/wallet.dat ]; then
-		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+	if [ ! -d $HOME/massa_backup/wallets ]; then
+		sudo cp -r $HOME/massa/massa-client/wallets $HOME/massa_backup/wallets
 	fi
 	if [ ! -f $HOME/massa_backup/node_privkey.key ]; then
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
@@ -109,7 +109,7 @@ EOF
 		sudo systemctl daemon-reload
 		sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
 		open_ports
-		sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat
+		sudo cp -r $HOME/massa_backup/wallets $HOME/massa/massa-client/wallets
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/Massa/main/insert_variables.sh)
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 		printf_n "
@@ -179,7 +179,7 @@ EOF
 					if [ -f $HOME/massa/massa-node/config/node_privkey.key ]; then
 						./massa-client -p "$massa_password" wallet_generate_secret_key
 						mkdir -p $HOME/massa_backup
-						sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+						sudo cp -r $HOME/massa/massa-client/wallets $HOME/massa_backup/wallets
 						sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 						break
 					else
@@ -190,7 +190,7 @@ EOF
 			else
 				sudo cp $HOME/massa_backup/node_privkey.key $HOME/massa/massa-node/config/node_privkey.key
 				sudo systemctl restart massad
-				sudo cp $HOME/massa_backup/wallet.dat $HOME/massa/massa-client/wallet.dat	
+				sudo cp -r $HOME/massa_backup/wallets $HOME/massa/massa-client/wallets
 			fi
 			printf_n "${C_LGn}Done!${RES}"
 			cd
@@ -280,10 +280,10 @@ uninstall() {
 	sudo systemctl stop massad
 	if [ ! -d $HOME/massa_backup ]; then
 		mkdir $HOME/massa_backup
-		sudo cp $HOME/massa/massa-client/wallet.dat $HOME/massa_backup/wallet.dat
+		sudo cp -r $HOME/massa/massa-client/wallets $HOME/massa_backup/wallets
 		sudo cp $HOME/massa/massa-node/config/node_privkey.key $HOME/massa_backup/node_privkey.key
 	fi
-	if [ -f $HOME/massa_backup/wallet.dat ] && [ -f $HOME/massa_backup/node_privkey.key ]; then
+	if [ -d $HOME/massa_backup/wallets ] && [ -f $HOME/massa_backup/node_privkey.key ]; then
 		rm -rf $HOME/massa/ /etc/systemd/system/massa.service /etc/systemd/system/massad.service
 		sudo systemctl daemon-reload
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n massa_password -da
